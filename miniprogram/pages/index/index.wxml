@@ -21,7 +21,7 @@
       </view>
 
       <view class="tui-top-item {{tabIndex==1?'tui-active tui-bold':''}}" bindtap="screen" data-index="1">
-        评论
+        回复
         <tui-icon name="{{commented==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==1?'#e41f19':'#444'}}"
           tui-icon-class="tui-ml">
         </tui-icon>

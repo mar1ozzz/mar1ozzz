@@ -400,7 +400,7 @@ if(index==2){
 })
 
 
-//获取我评论的帖子
+//获取我回复的帖子
 
 app.router('getMycommentList', async (ctx, next) => {
   let {

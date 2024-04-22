@@ -18,7 +18,7 @@
           <image wx:if="{{item.score>0}}" class="score-image" src='score.png'></image>
           <view> 
           <view class="tui-line-cell">        
-            <view class="tui-pro-pay" >评论：{{item.comment}}</view>
+            <view class="tui-pro-pay" >回复：{{item.comment}}</view>
             <view class="tui-pro-pay" >关注：{{item.watch}}</view>
             <view class="tui-pro-pay" >评分：{{item.score}}</view>
           </view> 

@@ -74,7 +74,7 @@
     </block>
     <block wx:else>
       <button class="footer-btn-comment" bindtap="comment">
-        评论
+        回复
       </button>
       <button class="footer-btn-watch" bindtap="watch">
         {{watched==false?'关注':'取消关注'}}

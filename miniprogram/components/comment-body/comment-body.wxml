@@ -10,7 +10,7 @@
               
           </view>
           <view wx:else class="comment-line">             
-              <view class="star-title">评论({{index+1}})</view>             
+              <view class="star-title">回复({{index+1}})</view>             
           </view>
         
           
@@ -28,7 +28,7 @@
           </view>
           <view>
             <view class="tui-line-cell">             
-              <view class="tui-pro-author">评论人：{{item.author}}</view>
+              <view class="tui-pro-author">回复人：{{item.author}}</view>
               <view class="tui-pro-author">{{item.product_time}}</view>
             </view>
           </view>

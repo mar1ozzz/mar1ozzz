@@ -45,7 +45,7 @@
 
           <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="tomy" data-info="2">
             <tui-icon name="message-fill" size="24" color="#f06c7a"></tui-icon>
-            <view class="tui-cell-name">我的评论</view>
+            <view class="tui-cell-name">我的回复</view>
           </tui-list-cell>
 
           <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="tomy" data-info="3">
