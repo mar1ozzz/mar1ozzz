@@ -1,0 +1,84 @@
+<!---根据pageType状态显示map组件-->
+<view wx:if="{{pageType=='add'}}">
+  <map id="map" style="width: 100%; height: 300px;" latitude="{{latitude}}" longitude="{{longitude}}" bindtap="onMapTap" bindpoitap="onMapTap" show-location markers="{{markers}}" scale="11"></map>
+  <view class="location-view">
+    <text class="location-text">经度：{{wgslongitude}}</text>
+    <text class="location-text">纬度：{{wgslatitude}}</text>
+</view>
+</view>
+
+<!---根据pageType状态显示map组件-->
+<view class="container">
+  <form bindsubmit="formSubmit">
+    <tui-list-cell>
+      <view class="tui-line-cell">
+        <view class="tui-title">标题：</view>
+        <input placeholder-class="phcolor" value="{{title}}" class="tui-input" name="title" disabled="{{pageType=='show'}}" placeholder="请输入标题" type="text" />
+      </view>
+    </tui-list-cell>
+
+<tui-list-cell>
+  <view class="tui-line-cell">
+    <view class="tui-title">分类：</view>
+      <picker class="tui-input tui-picker" bindchange="classifyPickerChange" value="{{classifyIndex}}" range="{{classifyList}}" disabled="{{pageType=='show'}}"><input class="set-right-text" value="{{classifyList[classifyIndex]}}" disabled name="type" /></picker>
+    </view>
+</tui-list-cell>
+
+<tui-list-cell>
+    <view class="tui-line-cell">
+      <view class="tui-title">状态：</view>
+      <picker class="tui-input tui-picker" bindchange="zhuangtaiPickerChange" value="{{zhuangtaiIndex}}" range="{{zhuangtaiList}}">
+        <input class="set-right-text" value="{{ztlistpost}}" disabled name="type" /> </picker>
+    </view>
+    <button class="my-custom-button" bindtap="xiugaizhuangtai">确认修改</button>
+</tui-list-cell>
+
+    <tui-list-cell >
+      <view class="tui-line-cell">
+
+        <view class="tui-title">详情：</view>
+
+        <view class="uni-textarea">
+          <textarea bindconfirm="confirmTextArea" placeholder="详细信息....." maxlength="-1"  auto-height="true" class="textarea-ui" value="{{content}}" name="content" show-confirm-bar="{{true}}" placeholder-class="placeholderText" bindinput="bindTextarea" disabled="{{pageType=='show'}}"/>
+        </view>
+      </view>
+    </tui-list-cell>
+
+
+    <tui-list-cell hover="{{false}}" last="{{true}}">
+      <view class="img-body">
+        <view class="img-header">
+          <view class="img-title">图片</view>
+          <view class="img-num">{{product_img_list.length}}/9</view>
+        </view>
+        <tui-upload value="{{product_img_list||[]}}" forbidAdd="{{pageType=='show'}}" forbidDel="{{pageType=='show'}}" tui-upload-class="image-item" bindcomplete="chooseImageHandle" catalogue="product"></tui-upload>
+        <view class='edit-img'>
+          <view wx:if="{{pageType=='show'}}" wx:for="{{product_img_list}}" wx:key="index" bindtap="ViewImage" data-url="{{product_img_list[index]}}">
+            <image src='{{item}}' mode='aspectFill' />
+          </view>
+        </view>
+      </view>
+    </tui-list-cell>
+
+    <view class="comment-list" wx:if="{{pageType=='show'}}">
+      <comment-body mode="{{'one'}}" data="{{commentList}}">
+      </comment-body>
+    </view>
+
+
+    <block wx:if="{{pageType!='show'}}">
+      <button class="footer-btn" formType="submit">
+        提交
+      </button>
+    </block>
+    <block wx:else>
+      <button class="footer-btn-comment" bindtap="comment">
+        评论
+      </button>
+      <button class="footer-btn-watch" bindtap="watch">
+        {{watched==false?'关注':'取消关注'}}
+      </button>
+    </block>
+
+  </form>
+</view>

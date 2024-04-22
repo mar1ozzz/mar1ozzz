@@ -1,0 +1,43 @@
+<view class="container">
+  <form bindsubmit="formSubmit">
+   
+
+    <tui-list-cell padding="0px 15px">
+      <view class="tui-line-cell">
+        
+          <view class="tui-title">详情：</view>
+        
+        <view class="uni-textarea">
+          <textarea bindconfirm="confirmTextArea" placeholder="请输入内容....." maxlength="-1" class="textarea-ui" value="{{content}}" name="content" show-confirm-bar="{{true}}" placeholder-class="placeholderText" bindinput="bindTextarea" />
+        </view>
+      </view>
+    </tui-list-cell>
+
+
+
+    <tui-list-cell hover="{{false}}" last="{{true}}">
+      <view class="img-body">
+        <view class="img-header">
+          <view class="img-title">图片</view>
+          <view class="img-num">{{product_img_list.length}}/9</view>
+        </view>
+        <tui-upload value="{{product_img_list||[]}}" forbidAdd="{{pageType=='show'}}" forbidDel="{{pageType=='show'}}" tui-upload-class="image-item" bindcomplete="chooseImageHandle" catalogue="product"></tui-upload>
+        <view class='edit-img'>
+        <view  wx:if="{{pageType=='show'}}" wx:for="{{product_img_list}}"  wx:key="index" bindtap="ViewImage" data-url="{{product_img_list[index]}}">
+            <image src='{{item}}' mode='aspectFill' />
+        </view>
+        
+    </view>
+      </view>
+    </tui-list-cell>
+
+
+    <block wx:if="{{pageType!='show'}}">
+      <button class="footer-btn" formType="submit">
+        提交
+      </button>
+    </block>
+    
+
+  </form>
+</view>

@@ -1,0 +1,178 @@
+.tui-product-list {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.tui-product-container {
+  margin-right: 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.tui-product-container:last-child {
+  margin-right: 0;
+}
+
+.product-item {
+  width: 100%;
+}
+
+
+
+.tui-pro-item {
+  width: 100%;
+  margin-bottom: 4%;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  
+}
+
+.tui-pro-img {
+  width: 100%;
+  display: block;
+}
+
+.tui-pro-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 20rpx; 
+  width: 100%;
+}
+
+.tui-pro-tit {
+  margin:20rpx;
+  width:100%;
+  color: #2e2e2e;
+  font-size: 30rpx;
+  font-weight:bold;
+  letter-spacing:4rpx;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  
+  
+}
+.score-image{
+  width:140rpx;
+  height:100rpx;
+  right: 50rpx;
+  z-index:2;
+  position: absolute;
+}
+
+
+.image{
+  width: 200rpx;
+  height: 200rpx;
+  margin: 10rpx ;
+}
+
+
+.tui-line-cell {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  padding-left:20rpx;
+  padding-right:20rpx;
+  }
+
+.tui-pro-price {
+  padding-top: 6rpx;
+}
+
+.tui-sale-price {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #e41f19;
+}
+
+.tui-factory-price {
+  font-size: 24rpx;
+  color: #a0a0a0;
+  text-decoration: line-through;
+  padding-left: 12rpx;
+}
+
+.tui-pro-pay {
+  padding-top: 6rpx;
+  font-size: 24rpx;
+  color: #656565;
+}
+
+.tui-pro-author{
+  padding-top: 6rpx;
+  font-size: 24rpx;
+  color: #656565;  
+}
+
+/* 
+  两列
+*/
+.pro-two {
+  width: 49%;
+}
+
+.pro-two .tui-pro-img {
+  height: 380rpx;
+}
+
+/* 
+  一列
+*/
+
+.pro-one {
+  width: 98vw;
+  margin-top:20rpx;
+}
+
+.pro-one .tui-pro-item {
+  display: flex;
+  margin-bottom: 2rpx !important;
+}
+
+.pro-one .tui-pro-img {
+  width: 260rpx;
+  height: 260rpx;
+  flex-shrink: 0;
+  border-radius: 12rpx;
+}
+
+/* 
+  一列
+*/
+
+.pro-one-small {
+  width: 100%;
+  margin: auto;
+  margin-bottom: 16rpx;
+}
+
+.pro-one-small .tui-pro-item {
+  display: flex;
+  margin-bottom: 0rpx;
+  background-color: rgba(222, 222, 222, 0.3);
+}
+
+.pro-one-small .tui-pro-img {
+  width: 178rpx;
+  height: 178rpx;
+  flex-shrink: 0;
+  border-radius: 12rpx;
+}
+
+.pro-one-small .tui-pro-content {
+  padding: 25rpx 20rpx 25rpx 30rpx;
+}

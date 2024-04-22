@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "comment-body":"../../../components/comment-body/comment-body",
+    "tui-list-cell": "../../../components/list-cell/list-cell",
+    "tui-list-view": "../../../components/list-view/list-view",
+    "tui-upload": "../../../components/tui-upload/tui-upload"
+  }
+}

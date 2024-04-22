@@ -1,0 +1,154 @@
+@import '../../lib/iconfont/iconfont.wxss';
+
+page {
+  padding-bottom: 90rpx; 
+  background: #f7f7f7;
+ 
+}
+
+.container {
+  padding: 20rpx 0 30rpx 0;
+  background: #f7f7f7;
+}
+
+.tui-line-cell {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.icon-plus {
+  width: 200rpx;
+  height: 200rpx;
+  background-color: rgba(87,107,149,0.1);
+  font-size: 40pt;
+  color: #888;
+  line-height: 200rpx;
+  text-align: center;
+}
+
+.iconfont {
+  color: #888;
+}
+
+.edit-img {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: space-between;
+}
+.edit-img  image {
+  width: 200rpx;
+  height: 200rpx;
+  margin: 0 10rpx 10rpx 0;
+}
+
+
+.tui-title {
+  line-height: 32rpx;
+  width: 15%;
+}
+.uni-textarea {
+  width: 85%;  
+  
+}
+.textarea-ui{
+  width: 100%;
+  font-size: 36rpx;
+  min-height:200rpx;
+  
+}
+
+.tui-input {
+  font-size: 32rpx;
+  color: #333;
+  padding-left: 30rpx;
+  flex: 1;
+}
+
+.set-right-text{
+  padding-top: 13px;
+  padding-bottom:13px;
+}
+
+.phcolor{
+  font-size: 26rpx;
+}
+
+.img-body {
+  width: 100%;
+}
+
+.img-header {
+  display: flex;
+  font-size: 26rpx;
+  align-items: center;
+  margin-bottom: 20rpx;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.img-title {
+  font-size: 28rpx;
+  color: #000000;
+}
+
+.img-num {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.footer-btn-comment {
+  height: 90rpx;
+  line-height: 90rpx;
+  width: 45vw;
+  position: fixed;
+  bottom: 0;
+  left: 0;  
+  background-color: #f06c7a;
+  text-align: center;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 20rpx 20rpx 0rpx 0rpx;
+  margin: 0rpx;
+}
+
+.footer-btn-watch {
+  height: 90rpx;
+  line-height: 90rpx;
+  width: 45vw;
+  position: fixed;
+  bottom: 0;
+  right: 0;  
+  background-color: #f06c7a;
+  text-align: center;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 20rpx 20rpx 0rpx 0rpx;
+  margin: 0rpx;
+}
+
+.footer-btn {
+  height: 90rpx;
+  line-height: 90rpx;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  right: 0;  
+  background-color: #f06c7a;
+  text-align: center;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 20rpx 20rpx 0rpx 0rpx;
+  margin: 0rpx;
+}
+
+
+.image-item {
+  width: 210rpx !important;
+  height: 210rpx !important;
+}

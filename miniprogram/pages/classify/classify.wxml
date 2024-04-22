@@ -1,0 +1,19 @@
+<view class="container">
+
+  <scroll-view scroll-y scroll-with-animation class="tab-view" scroll-top="{{scrollTop}}">
+    <view wx:for="{{menuList}}" wx:key="{{index}}" class="tab-bar-item {{currentTab==index ? 'active' : ''}}"
+      data-current="{{index}}" catchtap="swichNav">
+      <text>{{item.product_type_name}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="right-box">
+    <block wx:for="{{menuList}}" wx:key="{{index}}">
+      <view class="page-view" hidden="{{currentTab!==index}}">
+        <view class="class-box">
+          <product-body mode="one-small" data="{{productList}}"></product-body>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

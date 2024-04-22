@@ -1,0 +1,32 @@
+<!-- 地图组件 -->
+<map longitude="{{104.71465}}" latitude="{{31.46104}}" scale="8" markers="{{markers}}"bindmarkertap="detail"show-location title=""
+></map>
+<!-- 图例 -->
+<view class="map-legend">
+  <view class="legend-item">
+    <image src="../../static/icon/规建.png" class="legend-icon"></image>
+    <text>已规划</text>
+  </view>
+  <view class="legend-item">
+    <image src="../../static/icon/规建.png" class="legend-icon"></image>
+    <text>建设中</text>
+  </view>
+  <view class="legend-item">
+    <image src="../../static/icon/待回复.png" class="legend-icon"></image>
+    <text>暂挂中</text>
+  </view>
+  <view class="legend-item">
+    <image src="../../static/icon/待回复.png" class="legend-icon"></image>
+    <text>待回复</text>
+  </view>
+  <view class="legend-item">
+    <image src="../../static/icon/已解决.png" class="legend-icon"></image>
+    <text>已解决</text>
+  </view>
+</view>
+
+<view bindtap='addPost' class="add_icon">
+    <tui-icon name="add" color="red" tui-icon-class="add"
+       ></tui-icon>
+  </view>
+

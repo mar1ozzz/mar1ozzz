@@ -1,0 +1,8 @@
+{
+  "usingComponents":{
+    "star": "../../components/starRating/starRating",
+    "tui-list-cell": "../../../components/list-cell/list-cell",
+    "tui-list-view": "../../../components/list-view/list-view",
+    "tui-upload": "../../../components/tui-upload/tui-upload"
+  }
+}

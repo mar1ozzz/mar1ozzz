@@ -1,0 +1,7 @@
+<table scrollViewHeight="calc(100vh - 114rpx)" bindscrolltolower="getList" class="basic-table"
+  columns="{{tableColumns}}" dataList="{{dataList}}" getListLoading="{{isLoad}}"
+  showTipImage="{{dataList.length===0&&!isLoad}}" bindclicklistitem="handleClickItem" rowKey="_id" />
+
+
+<tui-fab bgColor="#f06c7a" width="90" height="90" right="60" bottom="80" bindclick="addHandle">
+</tui-fab>

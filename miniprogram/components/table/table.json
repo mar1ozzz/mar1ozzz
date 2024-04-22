@@ -1,0 +1,13 @@
+{
+  "component": true,
+  "usingComponents": {
+    "zml-tr": "./components/tr/tr",
+    "zml-empty": "../empty/empty",
+    "tui-loadmore": "../loadmore/loadmore",
+    "tui-nomore": "../nomore/nomore"
+  },
+  "componentGenerics": {
+    "action-td": true,
+    "expand-component": true
+  }
+}

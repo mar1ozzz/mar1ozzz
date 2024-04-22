@@ -1,0 +1,16 @@
+<view class="empower">
+  <view class='header'>
+    <view class="login-img">
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
+  </view>
+  <view class='content'>
+    <view>申请获取以下权限</view>
+    <text>获得你的公开信息(昵称，头像、地区等)</text>
+  </view>
+
+ <!--  <button class='bottom' style="background-color:{{buttonBgColor}};color:{{buttonFontColor}}" type='primary'
+    open-type="getUserInfo" withCredentials="true" lang="zh_CN" bindtap="wxGetUserInfo">
+    授权登录
+  </button> -->
+</view>

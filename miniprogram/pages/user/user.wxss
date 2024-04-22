@@ -1,0 +1,526 @@
+.tui-header-box {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9998;
+}
+
+.tui-header {
+  width: 100%;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 500;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* #ifndef MP */
+.tui-header-icon {
+  position: fixed;
+  top: 0;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  transform: translateZ(0);
+  z-index: 99999;
+}
+
+/* #endif */
+/* #ifdef MP */
+.tui-set-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* #endif */
+.tui-icon-box {
+  position: relative;
+}
+
+.tui-icon-setup {
+  margin-left: 16rpx;
+}
+
+.tui-badge {
+  position: absolute;
+  font-size: 24rpx;
+  height: 32rpx;
+  min-width: 20rpx;
+  padding: 0 6rpx;
+  border-radius: 40rpx;
+  right: 10rpx;
+  top: -5rpx;
+  transform: scale(0.8) translateX(60%);
+  transform-origin: center center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.tui-badge-red {
+  background: #F74D54;
+  color: #fff;
+}
+
+.tui-badge-white {
+  background: #fff;
+  color: #F74D54;
+}
+
+.tui-badge-dot {
+  position: absolute;
+  height: 12rpx;
+  width: 12rpx;
+  border-radius: 50%;
+  right: -12rpx;
+  top: 0;
+  background: #F74D54;
+}
+
+.tui-mybg-box {
+  width: 100%;
+  height: 464rpx;
+  position: relative;
+}
+
+.tui-my-bg {
+  width: 100%;
+  height:300rpx;
+  display: block;
+  background-color: #f06c7a;
+}
+
+.tui-header-center {
+  position: absolute;
+  width: 100%;
+  height: 128rpx;
+  left: 0;
+  top: 120rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tui-avatar {
+  flex-shrink: 0;
+  width: 128rpx;
+  height: 128rpx;
+  display: block;
+  border-radius: 50%;
+  position: relative;
+  margin: 10rpx;
+}
+
+.user-img {
+  border-radius: 150rpx;
+}
+
+
+.tui-info {
+  width: 60%;
+  padding-left: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 90rpx;
+}
+
+.tui-nickname {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 10rpx;
+}
+
+.tui-img-vip {
+  width: 56rpx;
+  height: 24rpx;
+  margin-left: 18rpx;
+}
+
+.tui-explain {
+  width: 80%;
+  font-size: 24rpx;
+  font-weight: 400;
+  color: #fff;
+  opacity: 0.75;
+  padding-top: 8rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tui-btn-edit {
+  flex-shrink: 0;
+  padding-right: 22rpx;
+}
+
+.tui-header-btm {
+  width: 100%;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 280rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.tui-btm-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tui-btm-num {
+  font-size: 32rpx;
+  font-weight: 600;
+  position: relative;
+}
+
+.tui-btm-text {
+  font-size: 24rpx;
+  opacity: 0.85;
+  padding-top: 4rpx;
+}
+
+.tui-content-box {
+  width: 100%;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  position: relative;
+  top: -72rpx;
+  z-index: 10;
+}
+
+.tui-box {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 3rpx 20rpx rgba(183, 183, 183, 0.1);
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.tui-order-box {
+  height: 236rpx;
+}
+
+.tui-cell-header {
+  width: 100%;
+  height: 82rpx;
+  padding: 0 26rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tui-cell-title {
+  font-size: 30rpx;
+  line-height: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.tui-cell-sub {
+  font-size: 26rpx;
+  font-weight: 400;
+  color: #999;
+  padding-right: 28rpx;
+}
+
+.tui-order-list {
+  width: 100%;
+  height: 150rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.tui-order-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tui-order-text,
+.tui-tool-text {
+  font-size: 26rpx;
+  font-weight: 400;
+  color: #666;
+  padding-top: 8rpx;
+}
+
+.tui-tool-text {
+  font-size: 24rpx;
+}
+
+.tui-order-icon {
+  width: 70rpx;
+  height: 70rpx;
+  display: block;
+  border-radius: 4rpx;
+}
+
+.tui-assets-box {
+  height: 178rpx;
+  margin-top: 20rpx;
+}
+
+.tui-assets-list {
+  height: 84rpx;
+}
+
+.tui-assets-num {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  position: relative;
+}
+
+.tui-assets-text {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: #666;
+  padding-top: 6rpx;
+}
+
+.tui-tool-box {
+  margin-top: 20rpx;
+}
+
+.tui-flex-wrap {
+  flex-wrap: wrap;
+  height: auto;
+  padding-bottom: 30rpx;
+}
+
+.tui-tool-item {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 30rpx;
+}
+
+.tui-tool-icon {
+  width: 64rpx;
+  height: 64rpx;
+  display: block;
+}
+
+.tui-badge-icon {
+  width: 66rpx;
+  height: 30rpx;
+  position: absolute;
+  right: 0;
+  transform: translateX(88%);
+  top: -15rpx;
+}
+
+/*为你推荐*/
+.tui-product-list {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.tui-product-container {
+  flex: 1;
+  margin-right: 2%;
+}
+
+.tui-product-container:last-child {
+  margin-right: 0;
+}
+
+.tui-pro-item {
+  width: 100%;
+  margin-bottom: 4%;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.tui-pro-img {
+  width: 100%;
+  display: block;
+}
+
+.tui-pro-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 20rpx;
+}
+
+.tui-pro-tit {
+  color: #2e2e2e;
+  font-size: 26rpx;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tui-pro-price {
+  padding-top: 18rpx;
+}
+
+.tui-sale-price {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #e41f19;
+}
+
+.tui-factory-price {
+  font-size: 24rpx;
+  color: #a0a0a0;
+  text-decoration: line-through;
+  padding-left: 12rpx;
+}
+
+.tui-pro-pay {
+  padding-top: 10rpx;
+  font-size: 24rpx;
+  color: #656565;
+}
+
+.tui-view {
+  width: 100%;
+  padding: 0 30rpx !important;
+  box-sizing: border-box;
+  position: relative;
+  top: -60rpx;
+  z-index: 10;
+  break-after: 10rpx;
+}
+
+.tui-cell-name {
+  padding-left: 20rpx;
+  vertical-align: middle;
+  line-height: 30rpx;
+}
+
+.tui-list::after {
+  left: 94rpx !important;
+}
+
+
+.u-fab {
+  position: fixed;
+  left: auto;
+  right: 30rpx;
+  bottom: 50rpx;
+  position: fixed;
+  z-index: 99997;
+}
+
+.u-fab .fab-bdoy {
+  width: 85rpx;
+  height: 85rpx;
+  border-radius: 50%;
+  background: #f06c7a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-bdoy button {
+  background-color: transparent;
+  padding: 0rpx;
+  margin: 0rpx;
+  line-height: 1;
+  overflow: visible;
+  color: #4e6565;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0rpx;
+  margin: 0rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-bdoy button::after {
+  /*button的边框样式是通过::after方式实现的*/
+  border: none;
+}
+
+.fab-bdoy .button-hover {
+  /*点击后样式*/
+  color: #000;
+}
+
+button {
+  background-color: transparent; 
+  border-radius: 0rpx; 
+  padding: 0rpx; 
+  margin: 0rpx; 
+  line-height: 1; 
+  overflow: visible; 
+  color: rgba(78, 101, 101, 1);   
+  border-radius: 80rpx; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  
+}
+
+button::after {
+  /*button的边框样式是通过::after方式实现的*/
+  border: none;
+}
+
+.button-hover {
+  /*点击后样式*/
+  color: #000;
+}
+
+button.share-menu{
+  width: 100%;
+  padding: 0px;
+  font-size: 32rpx;
+  font-weight: normal;
+  line-height: normal;
+  border-radius:0rpx;
+  text-align: left;
+  margin: 0rpx;
+  justify-content:flex-start;
+  padding: 26rpx 30rpx;
+}
+
+
+.order-icon{
+  font-size: 50rpx;
+}

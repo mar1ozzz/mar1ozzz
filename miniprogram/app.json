@@ -1,0 +1,96 @@
+{
+    "pages": [
+        "pages/regist/regist",
+        "pages/index/index",
+        "pages/post-list/post-list",
+        "pages/admin/post-update/post-update",
+        "pages/comment/comment",
+        "pages/preorder/preorder",
+        "pages/classify/classify",
+        "pages/cart/cart",
+        "pages/user/user",
+        "pages/search/search",
+        "pages/product-list/product-list",
+        "pages/product-detail/product-detail",
+        "pages/submit-order/submit-order",
+        "pages/address/address",
+        "pages/edit-address/edit-address",
+        "pages/deposit/deposit",
+        "pages/success/success",
+        "pages/feedback/feedback",
+        "pages/my-collection/my-collection",
+        "pages/my-order/my-order",
+        "pages/admin/menu/menu",
+        "pages/admin/menulist/menulist",
+        "pages/admin/menu-update/menu-update",
+        "pages/admin/preorder-list/preorder-list",
+        "pages/admin/user-list/user-list",
+        "pages/admin/swiper-list/swiper-list",
+        "pages/admin/swiper-update/swiper-update",
+        "pages/admin/product-list/product-list",
+        "pages/admin/type-list/type-list",
+        "pages/admin/type-update/type-update",
+        "pages/admin/order-list/order-list",
+        "pages/admin/order-update/order-update",
+        "pages/admin/feedback-list/feedback-list",
+        "pages/admin/feedback-update/feedback-update",
+        "pages/chart/chart",
+        "pages/map/map"
+    ],
+    "window": {
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "网络直通车",
+        "onReachBottomDistance": 50
+    },
+    "tabBar": {
+        "color": "#999",
+        "selectedColor": "#333",
+        "backgroundColor": "#fff",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "static/icon/index_gray.png",
+                "selectedIconPath": "static/icon/index_black.png"
+            },
+            {
+              "pagePath": "pages/map/map",
+              "text": "地图",
+              "iconPath": "static/icon/地图13.png",
+              "selectedIconPath": "static/icon/地图14.png"
+          },
+            {
+                "pagePath": "pages/chart/chart",
+                "text": "统计",
+                "iconPath": "static/icon/classify_gray.png",
+                "selectedIconPath": "static/icon/classify_black.png"
+            },
+            {
+                "pagePath": "pages/user/user",
+                "text": "我的",
+                "iconPath": "static/icon/user_gray.png",
+                "selectedIconPath": "static/icon/user_black.png"
+            }
+        ]
+    },
+    "sitemapLocation": "sitemap.json",
+    "requiredPrivateInfos": [ 
+      "getLocation",
+      "onLocationChange",
+      "startLocationUpdateBackground",
+      "chooseAddress"
+      
+    ],
+    "permission": {
+      "scope.userLocation": {
+        "desc": "位置信息将用于提取经纬度"
+      },
+      "scope.userFuzzyLocation": {"desc": "位置信息将用于提取经纬度"}
+    },
+    "usingComponents": {
+        "tui-icon": "/components/icon/icon",
+        "tui-tag": "/components/tag/tag",
+        "tui-button": "/components/button/button"
+    }
+}

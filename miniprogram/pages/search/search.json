@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "tui-actionsheet": "../../components/actionsheet/actionsheet"
+  }
+}

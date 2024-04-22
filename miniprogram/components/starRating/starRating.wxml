@@ -1,0 +1,12 @@
+<!--component/starRating.wxml-->
+<view class="star">
+  <!--这里非必须数字5，自己自定义长度为5数组放入data来渲染也可以，总之循环五次 -->
+  <block wx:for="{{5}}" wx:key="{{item}}">
+    <!-- 这里50是当前使用星星图标宽度加与右侧星星间距之和，可自行根据设计图来计算 -->
+    <image style="left: {{index*(37+margin)}}rpx" src='{{(default/2)>index ? (default/2-index == 0.5?star_half:star_full):star_default}}'>
+      <view class="item" style="left:0rpx" data-score="{{index*2+1}}" bindtap="_selectLeft"></view>
+      <!-- 18rpx为当前使用星星图标宽度的一半 -->
+      <view class="item" style="left:36rpx" data-score="{{index*2+2}}" bindtap="_selectRight"></view>
+    </image>
+  </block>
+</view>

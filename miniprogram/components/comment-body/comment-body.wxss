@@ -1,0 +1,200 @@
+.tui-product-list {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.tui-product-container {
+  margin-right: 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+}
+
+
+.textarea-ui{
+  width: 100%;
+  font-size: 16px;
+  white-space:pre-line;
+  
+}
+
+.tui-product-container:last-child {
+  margin-right: 0;
+}
+
+.product-item {
+  width: 100%;
+}
+
+
+
+.tui-pro-item {
+  width: 100%;
+  margin-bottom: 4%;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.tui-pro-img {
+  width: 100%;
+  display: block;
+}
+
+.tui-pro-content {  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 10rpx; 
+  width: 100%;  
+}
+
+.tui-pro-tit {
+  width:100%;
+  color: #2e2e2e;
+  font-size: 36rpx;
+  word-break: break-all;  
+  display: -webkit-box;
+  -webkit-box-orient: vertical;  
+  padding-top: 20rpx;
+  padding-bottom: 20rpx;
+}
+
+.tui-line-cell {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  }
+
+.tui-pro-price {
+  padding-top: 6rpx;
+}
+
+.tui-sale-price {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #e41f19;
+}
+
+.tui-factory-price {
+  font-size: 24rpx;
+  color: #a0a0a0;
+  text-decoration: line-through;
+  padding-left: 12rpx;
+}
+
+.tui-pro-pay {
+  padding-top: 6rpx;
+  font-size: 24rpx;
+  color: #656565;
+}
+
+.tui-pro-author{
+  padding-top: 6rpx;
+  font-size: 24rpx;
+  color: #656565;  
+}
+
+/* 
+  两列
+*/
+.pro-two {
+  width: 49%;
+}
+
+.pro-two .tui-pro-img {
+  height: 380rpx;
+}
+
+/* 
+  一列
+*/
+
+.pro-one {
+  width: 98vw; 
+  margin-top:10px;
+ 
+}
+
+  
+
+.pro-one .tui-pro-item {
+  display: flex;
+  margin-bottom: 2rpx !important;
+}
+
+.pro-one .tui-pro-img {
+  width: 260rpx;
+  height: 400rpx;
+  flex-shrink: 0;
+  border-radius: 12rpx;
+}
+
+.edit-img {
+  display: flex;
+  width: 200rpx;
+  height: 200rpx;
+  margin: 20rpx 10rpx 10rpx 0rpx;
+  justify-content: space-between;
+}
+
+.image{
+  width: 200rpx;
+  height: 200rpx;
+  margin: 0 10rpx 10rpx 0;
+}
+
+/* 
+  一列
+*/
+
+.pro-one-small {
+  width: 100%;
+  margin: auto;
+  margin-bottom: 16rpx;
+}
+
+.pro-one-small .tui-pro-item {
+  display: flex;
+  margin-bottom: 0rpx;
+  background-color: rgba(222, 222, 222, 0.3);
+}
+
+.pro-one-small .tui-pro-img {
+  width: 178rpx;
+  height: 178rpx;
+  flex-shrink: 0;
+  border-radius: 12rpx;
+}
+
+.pro-one-small .tui-pro-content {
+  padding: 25rpx 20rpx 25rpx 30rpx;
+}
+.star-line{
+font-size: 36rpx;
+border-bottom: solid;
+border-width: 1px;
+border-color: gray;
+display: flex;
+justify-content: space-between;
+padding-bottom: 20rpx;
+color: gold;
+}
+.comment-line{
+font-size: 26rpx;
+border-bottom: solid;
+border-width: 1px;
+border-color: gray;
+display: flex;
+padding-bottom: 20rpx;
+padding-top: 5px;
+color: rgb(128, 0, 0);
+}

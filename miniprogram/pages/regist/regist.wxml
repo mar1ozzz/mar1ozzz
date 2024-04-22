@@ -1,0 +1,71 @@
+<view class="container">
+  <view class="user-img">
+              <image src="/static/img/dianzi2.png" mode="aspectFit" class="logo"></image>
+            </view>
+  <form class="login-form" bindsubmit="formSubmit">
+    <tui-list-cell class="tui-list-cell">
+      <view class="tui-line-cell">
+        <view class="tui-title">真实姓名:</view>
+        <input placeholder-class="phcolor" value="{{username}}" class="tui-input" name="username"
+          disabled="{{pageType=='grant'}}" placeholder="姓名" type="text" />
+      </view>
+    </tui-list-cell>
+
+   
+
+    <tui-list-cell >
+      <view class="tui-line-cell">
+        <view class="tui-title">人员归属:</view>
+        <picker class="tui-input tui-picker" bindchange="classifyPickerChange" 
+           range="{{quxian}}" disabled="{{pageType=='grant'}}">
+          <input class="tui-input" value="{{quxian[quxianIndex]}}" disabled
+            name="quxian" />
+        </picker>
+      </view>
+    </tui-list-cell>
+    <!-- <tui-list-cell>
+      <view class="tui-line-cell">
+        <view class="tui-title">渠道名称</view>
+        <input placeholder-class="phcolor" value="{{shopname}}" class="tui-input" name="shopname"
+          disabled="{{pageType=='show'}}" placeholder="渠道名称" type="digit" />
+      </view>
+    </tui-list-cell>
+    <tui-list-cell>
+      <view class="tui-line-cell">
+        <view class="tui-title">渠道编号</view>
+        <input placeholder-class="phcolor" value="{{shopId||0}}" class="tui-input" name="shopId"
+          disabled="{{pageType=='show'}}" placeholder="渠道编号" type="text" />
+      </view>
+    </tui-list-cell> -->
+    <tui-list-cell >
+      <view class="tui-line-cell">
+        <view class="tui-title">联系电话:</view>
+        <input placeholder-class="phcolor" value="{{phone}}" class="tui-input" name="phone"
+          disabled="{{pageType=='grant'}}" placeholder="联系电话" type="number" />
+      </view>
+    </tui-list-cell>
+    <view class="note" wx:if="{{pageType=='grant'}}">
+    你已注册成功，管理员正在进行信息审核，请耐心等候
+    </view>
+    
+    <block wx:elif="{{pageType=='update'}}">
+      <button class="footer-btn" formType="submit">
+        修改
+      </button>
+    </block>
+
+    <block wx:else="{{pageType=='regist'}}">
+      <button class="footer-btn" formType="submit">
+        审核
+      </button>
+    </block>
+
+    <block wx:if="{{pageType=='login'}}">
+      <button class="footer-btn" formType="submit">
+        进入
+      </button>
+    </block>
+    
+
+  </form>
+</view>

@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "tui-list-cell": "../list-cell/list-cell",
+    "tui-list-view": "../list-view/list-view"
+  }
+}
