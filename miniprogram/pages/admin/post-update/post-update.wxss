@@ -54,14 +54,13 @@ page {
 }
 
 .uni-textarea {
-  width: 80%;  
+  width: 80%; 
   flex-grow: 1;
-
 }
 .textarea-ui{
   width: 100%;
   font-size: 14px;
-  min-height:200rpx;
+  min-height:auto;
   background-color: #ffffff;
   
 }
@@ -176,22 +175,22 @@ map{
 
 .location-text:first-child {
   flex-grow: 1; /* 防止元素伸展，保持内容宽度 */
-  margin-left: 33rpx; /* 在元素左侧增加20rpx空白 */
-  font-size: 22rpx; /* 字体大小 */
+  margin-left: 16px; /* 在元素左侧增加20rpx空白 */
+  font-size: 12px; /* 字体大小 */
   color: #333; /* 字体颜色 */
-  margin-bottom: 0; /* 既然是横向排列，就移除底部间距 */
-  line-height: 1.5; /* 行高设置 */
+  margin-bottom: 0px; /* 既然是横向排列，就移除底部间距 */
+  line-height: 2; /* 行高设置 */
   color: #a39f9f; /* 设置字体颜色为灰色 */
   background-color: #ffffff;
 }
 
 .location-text:last-child {
   flex-grow: 1; /* 让第二个元素占用所有剩余空间 */
-  text-align: left; /* 将内容居中显示 */
-  font-size: 22rpx; /* 字体大小同第一个元素保持一致 */
+  text-align: left; /* 将内容居中在左 */
+  font-size: 12px; /* 字体大小 */
   color: #333; /* 字体颜色 */
   margin-bottom: 0; /* 移除底部间距，同上 */
-  line-height: 1.5; /* 行高 */
+  line-height: 2; /* 行高 */
   color: #a39f9f; /* 设置字体颜色为灰色 */
   background-color: #ffffff;
 }
