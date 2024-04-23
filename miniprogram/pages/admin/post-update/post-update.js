@@ -61,6 +61,8 @@ Page({
       id: 0,
       latitude : "",
       longitude : "",
+      width: 20,
+      height: 30,
   }],
     wgslatitude:"",
     wgslongitude:"",
@@ -119,7 +121,7 @@ Page({
     }
     this.getWatch()
     this.data.mapCtx = wx.createMapContext('map')
-    //获取客户经纬度自动更新
+    /*获取客户经纬度自动更新
     wx.getLocation({
       type:"gcj02",
       success: res => {
@@ -143,7 +145,7 @@ Page({
         });
       console.log('markers结果',this.data.markers)
     }
-    });
+    });*/
   },
 
 // 在onMapTap事件中更新标记位置并移动地图

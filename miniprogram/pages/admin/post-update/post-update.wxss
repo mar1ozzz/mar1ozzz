@@ -17,7 +17,8 @@ page {
   display: flex;
   align-items: center; /* 垂直居中内容 */
   background-color: #ffffff; /* 黑色背景 */
-  font-size: 15px;
+  font-size: 16px;
+  
 }
 
 .icon-plus {
@@ -51,6 +52,7 @@ page {
   width: 50px;
   height: 16px;
   background-color: #ffffff;
+  font-weight: bold ;
 }
 
 .uni-textarea {
@@ -73,8 +75,8 @@ page {
 }
 
 .set-right-text{
-  padding-top: 13px;
-  padding-bottom:13px;
+  padding-top: 0px;
+  padding-bottom:0px;
 }
 
 .phcolor{
@@ -95,8 +97,9 @@ page {
 }
 
 .img-title {
-  font-size: 28rpx;
+  font-size: 32rpx;
   color: #000000;
+  font-weight: bold;
 }
 
 .img-num {

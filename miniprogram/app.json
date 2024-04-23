@@ -75,17 +75,15 @@
         ]
     },
     "sitemapLocation": "sitemap.json",
-    "requiredPrivateInfos": [ 
-      "getLocation",
-      "onLocationChange",
-      "startLocationUpdateBackground",
+    "requiredPrivateInfos": [
+      "getLocation", 
+      "onLocationChange", 
+      "startLocationUpdateBackground", 
       "chooseAddress"
       
     ],
     "permission": {
-      "scope.userLocation": {
-        "desc": "位置信息将用于提取经纬度"
-      },
+      "scope.userLocation": {"desc": "位置信息将用于提取经纬度"},
       "scope.userFuzzyLocation": {"desc": "位置信息将用于提取经纬度"}
     },
     "usingComponents": {
