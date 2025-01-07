@@ -1,37 +1,217 @@
-map{
+.container {
+  position: relative;
   width: 100%;
-  height: 750px;
+  height: 100vh;
 }
-.add_icon{
-  position: fixed;
-  width:42px;
-  height:42px;
-bottom: 30px;
-right: 20px;
+
+.map {
+  width: 100%;
+  height: 100%;
+  transition: height 0.3s ease;
 }
+
+.map-half {
+  height: 50vh;
+}
+
+/* 图例样式 */
 .map-legend {
   position: absolute;
-  left: 10px; /*左侧预留*/
-  bottom: 10px; /*底部预留*/
+  left: 10px;
+  bottom: 10px;
   display: flex;
-  flex-direction: column; /* 按列排列 */
-  background-color: rgba(80, 80, 80, 0.3); /* 白色背景*/
+  flex-direction: column;
+  background-color: rgba(80, 80, 80, 0.3);
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(12, 0, 0, 0.1);
-  max-width: 300px; /* 根据实际需要调整最大宽度 */
+  max-width: 300px;
 }
+
 .legend-item {
   display: flex;
   align-items: center;
-  margin-bottom: 2px; /* 根据需要调整底部外边距，为下一个图例项留出空间 */
+  margin-bottom: 2px;
 }
+
 .legend-icon {
-  width: 15px; /* 或根据您的图标实际大小调整 */
-  height: 15px; /* 或根据您的图标实际大小调整 */
-  margin-right: 8px; /* 图标和文本之间的间距 */
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
 }
+
 .legend-item text {
-  font-size: 11px; /* 根据您的需求调整大小 */
-  color: rgb(236, 233, 233); /* 可选，设置文字颜色 */
+  font-size: 11px;
+  color: rgb(236, 233, 233);
+}
+
+/* 发帖表单样式 */
+.post-form {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  background: #fff;
+  border-radius: 20rpx 20rpx 0 0;
+  transition: bottom 0.3s ease;
+  z-index: 1000;
+}
+
+.post-form.show {
+  bottom: 0;
+}
+
+.post-form form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  padding: 16rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.form-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.location-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.close-btn {
+  font-size: 36rpx;
+  color: #999;
+  padding: 8rpx;
+}
+
+.form-content {
+  flex: 1;
+  padding: 16rpx 30rpx;
+  padding-bottom: 120rpx;
+  height: calc(50vh - 180rpx); /* 减去header和button的高度 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.title-input {
+  flex: 1;
+  height: 72rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+}
+
+.type-picker {
+  width: 180rpx;
+  height: 72rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 16rpx;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.content-textarea {
+  width: 100%;
+  height: 100rpx;
+  padding: 16rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+  box-sizing: border-box;
+}
+
+.upload-section {
+  margin-bottom: 16rpx;
+}
+
+.upload-hint {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.button-group {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 16rpx 30rpx;
+  gap: 20rpx;
+  background: #fff;
+  border-top: 1rpx solid #eee;
+  z-index: 1;
+}
+
+.cancel-btn, .submit-btn {
+  width: 180rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  margin: 0;
+  padding: 0;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.submit-btn {
+  background: #07c160;
+  color: #fff;
+}
+
+/* 确保地图占据上半部分 */
+#map {
+  height: 50vh;
+}
+
+.overlay {
+  display: none;
+}
+
+.tip-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10rpx;
+  background-color: rgba(231, 76, 60, 0.6);
+  color: #fff;
+  text-align: center;
+  font-size: 24rpx;
+  z-index: 1000;
 }

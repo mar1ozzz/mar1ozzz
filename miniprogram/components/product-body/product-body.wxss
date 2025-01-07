@@ -1,10 +1,160 @@
 .tui-product-list {
+  width: 100%;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+
+.tui-product-container {
+  padding: 20rpx 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.pro-one {
+  margin-bottom: 20rpx;
+}
+
+.tui-pro-item {
+  width: 100%;
+  margin-bottom: 10rpx;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.tui-pro-content {
+  padding: 20rpx;
+}
+
+.tui-line-cell {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.tui-pro-author {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.tui-pro-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 24rpx;
+}
+
+.status-pending {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
+
+.status-done {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+
+.tui-pro-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.tui-pro-tit {
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
+  align-items: center;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+  margin: 16rpx 0;
+}
+
+.tui-pro-tit text {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.tui-pro-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transform: translateX(20rpx);
+}
+
+.tui-pro-comment {
+  font-size: 24rpx;
+  color: #999;
+  margin-right: 16rpx;
+}
+
+.tui-pro-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.status-pending {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
+
+.status-done {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+
+.tui-line-cell {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.tui-pro-author {
+  margin-right: 16rpx;
+}
+
+.tui-pro-comment {
+  margin-right: 16rpx;
+}
+
+.tui-pro-time {
+  color: #999;
+}
+
+.edit-img {
+  display: flex;
   flex-wrap: wrap;
+  margin: 0 -5rpx;
+}
+
+.edit-img > view {
+  width: 33.33%;
+  padding: 5rpx;
   box-sizing: border-box;
+}
+
+.image {
   width: 100%;
+  height: 200rpx;
+  display: block;
+  border-radius: 6rpx;
+}
+
+.tui-pro-comment {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.hover {
+  opacity: 0.9;
+  transform: scale(0.98);
+  transition: all 0.2s ease-in-out;
 }
 
 .tui-product-container {
@@ -23,47 +173,11 @@
   width: 100%;
 }
 
-
-
-.tui-pro-item {
-  width: 100%;
-  margin-bottom: 4%;
-  background: #fff;
-  box-sizing: border-box;
-  border-radius: 12rpx;
-  
-}
-
 .tui-pro-img {
   width: 100%;
   display: block;
 }
 
-.tui-pro-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  padding: 20rpx; 
-  width: 100%;
-}
-
-.tui-pro-tit {
-  margin:20rpx;
-  width:100%;
-  color: #2e2e2e;
-  font-size: 30rpx;
-  font-weight:bold;
-  letter-spacing:4rpx;
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  
-  
-}
 .score-image{
   width:140rpx;
   height:100rpx;
@@ -72,25 +186,10 @@
   position: absolute;
 }
 
-
-.image{
-  width: 200rpx;
-  height: 200rpx;
-  margin: 10rpx ;
-}
-
-
-.tui-line-cell {
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  padding-left:20rpx;
-  padding-right:20rpx;
-  }
-
-.tui-pro-price {
+.tui-pro-pay {
   padding-top: 6rpx;
+  font-size: 24rpx;
+  color: #656565;
 }
 
 .tui-sale-price {
@@ -106,21 +205,6 @@
   padding-left: 12rpx;
 }
 
-.tui-pro-pay {
-  padding-top: 6rpx;
-  font-size: 24rpx;
-  color: #656565;
-}
-
-.tui-pro-author{
-  padding-top: 6rpx;
-  font-size: 24rpx;
-  color: #656565;  
-}
-
-/* 
-  两列
-*/
 .pro-two {
   width: 49%;
 }
@@ -128,31 +212,6 @@
 .pro-two .tui-pro-img {
   height: 380rpx;
 }
-
-/* 
-  一列
-*/
-
-.pro-one {
-  width: 98vw;
-  margin-top:20rpx;
-}
-
-.pro-one .tui-pro-item {
-  display: flex;
-  margin-bottom: 2rpx !important;
-}
-
-.pro-one .tui-pro-img {
-  width: 260rpx;
-  height: 260rpx;
-  flex-shrink: 0;
-  border-radius: 12rpx;
-}
-
-/* 
-  一列
-*/
 
 .pro-one-small {
   width: 100%;
@@ -175,4 +234,54 @@
 
 .pro-one-small .tui-pro-content {
   padding: 25rpx 20rpx 25rpx 30rpx;
+}
+
+.tui-title-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16rpx 0;
+}
+
+.tui-pro-tit {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.tui-pro-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+}
+
+.status-pending {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
+
+.status-done {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+
+.tui-line-cell {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.tui-pro-author {
+  margin-right: 16rpx;
+}
+
+.tui-pro-comment {
+  margin-right: 16rpx;
+}
+
+.tui-pro-time {
+  color: #999;
 }

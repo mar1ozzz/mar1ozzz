@@ -1,67 +1,30 @@
 <view class="container">
-
- <!--  <view class="tui-header-box">
-    <view class="tui-header" style="width:{{width}}px;height:{{height}}px">
-     
-      <view class="tui-searchbox" style="margin-top:{{inputTop}}px">
-        
-        <input class="tui-search-text" placeholder="请输入标题" type="text"/>
-        <icon type="search" size='15' color='#999'  bindtap="toSeachHandle"></icon>
+  <view class="tui-header-screen">
+    <view class="status-bar">
+      <view class="status-item {{currentStatus==0?'status-active':''}}" bindtap="screen" data-index="3">
+        <view class="status-text">全部状态</view>
       </view>
-    </view> 
-  </view> -->
-
-  <view class="tui-header-screen" >
-    <view class="tui-screen-top">
-      <view class="tui-top-item {{tabIndex==0?'tui-active tui-bold':''}}" data-index="0" bindtap="screen">
-        时间
-        <tui-icon name="{{timed==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==0?'#e41f19':'#444'}}"
-          tui-icon-class="tui-ml">
-        </tui-icon>
+      <view class="status-item {{currentStatus==1?'status-active':''}}" bindtap="screen" data-index="4">
+        <view class="status-text">待处理</view>
       </view>
-
-      <view class="tui-top-item {{tabIndex==1?'tui-active tui-bold':''}}" bindtap="screen" data-index="1">
-        回复
-        <tui-icon name="{{commented==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==1?'#e41f19':'#444'}}"
-          tui-icon-class="tui-ml">
-        </tui-icon>
+      <view class="status-item {{currentStatus==2?'status-active':''}}" bindtap="screen" data-index="5">
+        <view class="status-text">已处理</view>
       </view>
-
-      <view class="tui-top-item {{tabIndex==2?'tui-active tui-bold':''}}" bindtap="screen" data-index="2">
-        关注
-        <tui-icon name="{{watched==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==2?'#e41f19':'#444'}}"
-          tui-icon-class="tui-ml">
-        </tui-icon>
-      </view>
-
-   <!--    <view class="tui-top-item" bindtap="screen" data-index="2">
-        <tui-icon name="{{isList?'manage':'listview'}}" size="{{isList?22:18}}" bold="{{isList?false:true}}"
-          color="#333">
-        </tui-icon>
-      </view> -->
-
-    <!--   <view class="tui-dropdownlist {{selectH>0?'tui-dropdownlist-show':''}}" style="height:{{selectH}}rpx">
-        <view class="tui-dropdownlist-item {{item.selected?'tui-bold':''}}" wx:for="{{dropdownList}}" wx:key="{{index}}"
-          catchtap="dropdownItem" data-index="{{index}}">
-          <text class="tui-ml tui-middle">{{item.name}}</text>
-          <tui-icon name="check" size="16" color="#e41f19" bold="{{true}}" visible="{{item.selected}}"
-            tui-icon-class="tui-middle"></tui-icon>
+      <view class="status-item sort-item" bindtap="screen" data-index="0">
+        <view class="status-text">
+          时间
+          <tui-icon name="{{!timed?'arrowup':'arrowdown'}}" size="14" color="#666"></tui-icon>
         </view>
       </view>
-      <view class="tui-dropdownlist-mask {{selectH>0?'tui-mask-show':''}}" catchtap="hideDropdownList"></view> -->
-
     </view>
   </view>
 
-
-
-  <view class="product-list" >
+  <view class="product-list">
     <product-body mode="{{'one'}}" data="{{productList}}" binddetail="detail"></product-body>
   </view>
 
   <view bindtap='addPost' class="add_icon">
-    <tui-icon name="add" color="red" tui-icon-class="add"
-       ></tui-icon>
+    <tui-icon name="add" color="red" tui-icon-class="add"></tui-icon>
   </view>
 
   <tui-loadmore visible="{{loading}}" index="3" type="red"></tui-loadmore>

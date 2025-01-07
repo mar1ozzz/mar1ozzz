@@ -1,5 +1,6 @@
 {
-  
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
   "usingComponents": {
     "product-body":"../../components/product-body/product-body",
     "tui-loadmore": "../../components/loadmore/loadmore",

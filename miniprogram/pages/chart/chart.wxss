@@ -1,15 +1,74 @@
-/* pages/chart/chart.wxss */
-.ec-container {
+.table-container {
+  width: 100%; /* 设置容器宽度 */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: 100vw;
-  height: 100vh;
+  justify-content: space-between; /* 水平两端对齐 */
+  align-items: center; /* 垂直居中 */
 }
 
-ec-canvas {
-  width: 90%;
-  height: 100%;
+.table {
+  width: 100%; /* 表格宽度 */
+  border: 1px solid #ccc; /* 表格边框 */
+  border-collapse: collapse; /* 合并边框 */
+}
+
+.table-header, .table-row {
+  display: flex;
+  font-size: 10px; /* 减小字体大小 */
+}
+
+.table-header {
+  background-color: #f0f0f0; /* 表头背景色 */
+  font-weight: bold;
+}
+
+.header-item {
+  font-size: 10px; /* 减小表头字体大小 */
+  text-align: justify; /* 文字两端对齐 */
+  vertical-align: top; /* 文字顶端对齐 */
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+.header-item, .row-item {
+  flex: 1; /* 列等宽 */
+  text-align: center; /* 文本居中 */
+  padding: 8px 2px; /* 减小内边距 */
+  overflow: hidden; /* 防止内容溢出 */
+  text-overflow: ellipsis; /* 溢出时显示省略号 */
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+/* 第一列（部门/区县）固定宽度 */
+.header-item:first-child,
+.row-item:first-child {
+  flex: 0 0 70px; /* 固定宽度70px，不伸缩 */
+  max-width: 70px;
+}
+
+/* 数字列（总计和其他状态数）等宽 */
+.header-item:not(:first-child):not(:last-child),
+.row-item:not(:first-child):not(:last-child) {
+  flex: 1;
+}
+
+/* 最后一列（解决率）稍微窄一点 */
+.header-item:last-child,
+.row-item:last-child {
+  flex: 0 0 50px; /* 固定宽度50px */
+  max-width: 50px;
+}
+
+.table-body {
+  border-top: 1px solid #ccc; /* 表体上边框 */
+  display: flex;
+  flex-direction: column; /* 垂直方向排列 */
+}
+
+.row-item {
+  border-bottom: 1px solid #ccc; /* 行底边框 */
+  align-self: stretch; /* 拉伸自身以填充父容器 */
+}
+
+.total-row {
+  background-color: #f8f8f8; /* 总计行背景色 */
+  font-weight: bold; /* 总计行文字加粗 */
 }

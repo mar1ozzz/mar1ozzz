@@ -1,32 +1,83 @@
-<!-- 地图组件 -->
-<map longitude="{{104.71465}}" latitude="{{31.46104}}" scale="8" markers="{{markers}}"bindmarkertap="detail"show-location title=""
-></map>
-<!-- 图例 -->
-<view class="map-legend">
-  <view class="legend-item">
-    <image src="../../static/icon/规建.png" class="legend-icon"></image>
-    <text>已规划</text>
+<view class="container">
+  <view class="tip-bar">请点击地图选择你要反映的问题区域。</view>
+  <!-- 地图组件 -->
+  <map 
+    id="myMap"
+    longitude="{{longitude}}" 
+    latitude="{{latitude}}" 
+    scale="8"
+    markers="{{markers}}"
+    bindmarkertap="detail"
+    bindtap="onMapTap"
+    show-location 
+    class="map {{showForm ? 'map-half' : ''}}"
+  ></map>
+
+  <!-- 图例 -->
+  <view class="map-legend">
+    <view class="legend-item">
+      <image src="../../static/icon/规建.png" class="legend-icon"></image>
+      <text>已规划</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/规建.png" class="legend-icon"></image>
+      <text>建设中</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/待回复.png" class="legend-icon"></image>
+      <text>暂挂中</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/待回复.png" class="legend-icon"></image>
+      <text>待回复</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/已解决.png" class="legend-icon"></image>
+      <text>已解决</text>
+    </view>
   </view>
-  <view class="legend-item">
-    <image src="../../static/icon/规建.png" class="legend-icon"></image>
-    <text>建设中</text>
-  </view>
-  <view class="legend-item">
-    <image src="../../static/icon/待回复.png" class="legend-icon"></image>
-    <text>暂挂中</text>
-  </view>
-  <view class="legend-item">
-    <image src="../../static/icon/待回复.png" class="legend-icon"></image>
-    <text>待回复</text>
-  </view>
-  <view class="legend-item">
-    <image src="../../static/icon/已解决.png" class="legend-icon"></image>
-    <text>已解决</text>
+
+  <!-- 发帖表单 -->
+  <view class="post-form {{showForm ? 'show' : ''}}">
+    <form bindsubmit="formSubmit">
+      <view class="form-header">
+        <view class="header-left">
+          <text class="form-title">问题反馈</text>
+          <text class="location-text">经度：{{wgslongitude}}，纬度：{{wgslatitude}}</text>
+        </view>
+        <view class="close-btn" bindtap="hideForm">×</view>
+      </view>
+
+      <scroll-view scroll-y class="form-content">
+        <view class="form-row">
+          <input class="title-input" name="title" placeholder="请输入标题" value="{{formData.title}}" />
+          <picker bindchange="classifyPickerChange" value="{{classifyIndex}}" range="{{classifyList}}" class="type-picker">
+            <view class="picker-text">{{classifyList[classifyIndex] || '选择类别'}}</view>
+          </picker>
+        </view>
+
+        <textarea 
+          class="content-textarea" 
+          placeholder="请输入详细内容" 
+          name="content"
+          value="{{formData.content}}"
+        />
+
+        <view class="upload-section">
+          <text class="upload-hint">上传图片（最多9张）：</text>
+          <tui-upload 
+            value="{{product_img_list}}"
+            bind:complete="chooseImageHandle"
+            limit="9"
+            class="upload-component"
+          />
+        </view>
+      </scroll-view>
+
+      <view class="button-group">
+        <button class="cancel-btn" bindtap="hideForm">取消</button>
+        <button class="submit-btn" form-type="submit">提交</button>
+      </view>
+    </form>
   </view>
 </view>
-
-<view bindtap='addPost' class="add_icon">
-    <tui-icon name="add" color="red" tui-icon-class="add"
-       ></tui-icon>
-  </view>
-

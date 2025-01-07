@@ -1,4 +1,39 @@
-<!--pages/chart/chart.wxml-->
-<view class="ec-container">
-  <ec-canvas canvas-id="echart-pie" ec="{{ec}}"></ec-canvas>
+<view class="table-container">
+  <view class="table">
+    <view class="table-header">
+      <text class="header-item">部门/区县</text>
+      <text class="header-item">总计</text>
+      <text class="header-item">待回复</text>
+      <text class="header-item">规划中</text>
+      <text class="header-item">建设中</text>
+      <text class="header-item">暂挂中</text>
+      <text class="header-item">已解决</text>
+      <text class="header-item">解决率</text>
+    </view>
+    <view class="table-body">
+      <block wx:for="{{tableData}}" wx:key="index">
+        <view class="table-row">
+          <text class="row-item">{{item.author}}</text>
+          <text class="row-item">{{item.total}}</text>
+          <text class="row-item" style="color: {{item.A > 0 ? 'red' : 'black'}}">{{item.A}}</text>
+          <text class="row-item" style="color: {{item.B > 0 ? 'red' : 'black'}}">{{item.B}}</text>
+          <text class="row-item" style="color: {{item.C > 0 ? 'red' : 'black'}}">{{item.C}}</text>
+          <text class="row-item" style="color: {{item.D > 0 ? 'red' : 'black'}}">{{item.D}}</text>
+          <text class="row-item">{{item.E}}</text>
+          <text class="row-item">{{item.rate}}</text>
+        </view>
+      </block>
+      <!-- Total Row -->
+      <view class="table-row total-row">
+        <text class="row-item">总计</text>
+        <text class="row-item">{{total.total}}</text>
+        <text class="row-item" style="color: {{total.A > 0 ? 'red' : 'black'}}">{{total.A}}</text>
+        <text class="row-item" style="color: {{total.B > 0 ? 'red' : 'black'}}">{{total.B}}</text>
+        <text class="row-item" style="color: {{total.C > 0 ? 'red' : 'black'}}">{{total.C}}</text>
+        <text class="row-item" style="color: {{total.D > 0 ? 'red' : 'black'}}">{{total.D}}</text>
+        <text class="row-item">{{total.E}}</text>
+        <text class="row-item">{{total.rate}}</text>
+      </view>
+    </view>
+  </view>
 </view>
