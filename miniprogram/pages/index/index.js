@@ -151,6 +151,12 @@ Page({
       comment: 'desc',
       watch: 'desc'
     }
+
+    // 如果不是管理员，只显示自己的帖子
+    const userInfo = getApp().globalData.userInfo;
+    if (!userInfo.isAdmin) {
+      option.author = userInfo.username;
+    }
    
     let condition = {
       date: new Date()   
@@ -282,11 +288,14 @@ Page({
   },
 
   addPost() {
-    app.$comm.navigateTo("/pages/admin/post-update/post-update")
+    wx.switchTab({
+      url: '/pages/map/map'
+    })
   },
 
   detail(e) {
-    app.$comm.navigateTo("/pages/admin/post-update/post-update?id=" + e.currentTarget.dataset.id)
+    let post = e.detail.post;
+    app.$comm.navigateTo("/pages/admin/post-update/post-update?pageType=show&id=" + post._id + "&title=" + post.title + "&type=" + post.type + "&content=" + post.content + "&author=" + post.author)
   },
 
   onPullDownRefresh() {

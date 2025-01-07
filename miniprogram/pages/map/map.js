@@ -104,12 +104,21 @@ Page({
   },
 
   getdata: function() {
-    var that = this; 
-    wx.showLoading({ 
-      title: '加载中',
-    });
+    const app = getApp();
+    const userInfo = app.globalData.userInfo;
+    const db = wx.cloud.database();
+    const _ = db.command;
+    
+    let query = {};
+    
+    // 如果不是管理员，只显示自己的地图点
+    if (!userInfo.isAdmin) {
+      query.author = userInfo.username;
+    }
+    
     db.collection('post')
-      .skip(that.data.markers.length) 
+      .where(query)
+      .skip(this.data.markers.length) 
       .get() 
       .then(res => { 
         console.log(res); 
@@ -130,7 +139,7 @@ Page({
               break;
           }
           let [gcjLng, gcjLat] = wgs84togcj02(item.经度, item.纬度);
-          const markerId = that.data.markers.length + index;
+          const markerId = this.data.markers.length + index;
         return {
           id: markerId, 
           _id: item._id,
@@ -149,12 +158,12 @@ Page({
         } 
         };
       });
-      that.setData({
-        markers: [...that.data.markers, ...newMarkers] 
+      this.setData({
+        markers: [...this.data.markers, ...newMarkers] 
       });
       
       if (res.data.length > 0) {
-        that.getdata();
+        this.getdata();
       } else {
         wx.hideLoading({ 
           success: (res) => {
