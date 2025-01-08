@@ -156,7 +156,12 @@ Page({
     const userInfo = getApp().globalData.userInfo;
     if (!userInfo.isAdmin) {
       option.author = userInfo.username;
+      console.log('首页 - 普通用户查询，用户名：', userInfo.username);
+    } else {
+      console.log('首页 - 管理员用户查询');
     }
+    
+    console.log('首页 - 查询条件：', option);
    
     let condition = {
       date: new Date()   
@@ -173,7 +178,7 @@ Page({
     });
 
     return Promise.race([
-      app.$api.getPostList(Object.assign(option, condition)),
+      app.$api[userInfo.isAdmin ? 'getPostList' : 'getMyPostList'](Object.assign(option, condition)),
       timeoutPromise
     ]).then(res => {
       wx.hideLoading()

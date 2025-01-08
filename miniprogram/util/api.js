@@ -154,6 +154,9 @@ export const getMycommentList = (data) => userCallFunction('getMycommentList', d
 //帖子评分
 export const setPostScore = (data) => userCallFunction('setPostScore', data);
 
+//修改状态
+export const setPostStatus = (data) => userCallFunction('setPostStatus', data);
+
 //数据汇总
 export const getPostAggreate = (data) => userCallFunction('getPostAggreate', data);
 

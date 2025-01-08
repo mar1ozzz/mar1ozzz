@@ -189,17 +189,19 @@ onMapTap: function(e) {
   },
 
 // 修改状态按钮
-  xiugaizhuangtai: function (e) {
-    const xgzt = this.data.ztlistpost;
-    let data = xgzt;
-    console.log("修改状态按钮检查",data)
-    app.$api.addxgzt(data).then(res=>{
-      if (res.code) {
-        that.setData({
-          当前状态:!this.data.ztlistpost
-        })
-        app.$comm.successToShow("修改成功", () => {
-        })
+xiugaizhuangtai: function (e) {
+  const xgzt = this.data.ztlistpost;  // 获取当前选中的状态值
+  let data = {
+    当前状态: xgzt,
+    id: this.data._id  // 帖子ID
+  }
+  console.log("修改状态按钮检查", data)
+  app.$api.setPostStatus(data).then(res => {
+    if (res.code) {
+      this.setData({
+        当前状态: !this.data.ztlistpost
+      })
+      app.$comm.successToShow("修改成功", () => {})
     }
   })
 },

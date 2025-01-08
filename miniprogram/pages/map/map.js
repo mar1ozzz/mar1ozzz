@@ -95,7 +95,7 @@ Page({
       type: ''
     },
     product_img_list: [],
-    classifyList: ['运维', '开发', '测试', '其他'],
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆'],
     classifyIndex: 0
   },
 
@@ -125,17 +125,15 @@ Page({
         const newMarkers = res.data.map((item,index) => {
           let iconPath;
           switch (item.当前状态) {
-            case '建设中': 
-            case '规划中': 
-              iconPath = "../../static/icon/规建.png";
+            case '建设中': iconPath = "../../static/icon/建设中.png";
               break;
-            case '暂挂中': 
-            case '待回复': 
-              iconPath = "../../static/icon/待回复.png";
+            case '规划中':iconPath = "../../static/icon/规划中.png";
               break;
-            case '已解决': 
-            default: 
-              iconPath = "../../static/icon/已解决.png";
+            case '暂挂中':iconPath = "../../static/icon/暂挂中.png";
+              break;
+            case '待回复':iconPath = "../../static/icon/待回复.png";
+              break;
+            case '已解决':iconPath = "../../static/icon/已解决.png";
               break;
           }
           let [gcjLng, gcjLat] = wgs84togcj02(item.经度, item.纬度);
@@ -268,7 +266,7 @@ Page({
     // 添加作者信息和位置信息
     Object.assign(option, {
       author: app.globalData.userInfo.username,
-      author_id: app.globalData.userInfo.OPENDID,
+      author_id: app.globalData.userInfo.OPENID,
       author_belong: app.globalData.userInfo.quxian,
       经度: parseFloat(wgslongitude),
       纬度: parseFloat(wgslatitude),

@@ -26,14 +26,15 @@
 </tui-list-cell>
 
 <block wx:if="{{pageType!='add'}}">
-      <tui-list-cell>
-        <view class="tui-line-cell">
-          <view class="tui-title">状态</view>
-          <picker class="tui-input tui-picker" bindchange="zhuangtaiPickerChange" value="{{zhuangtaiIndex}}" range="{{zhuangtaiList}}">
-            <input class="set-right-text" value="{{ztlistpost}}" disabled name="type" /> </picker>
-        </view>
-        <button class="my-custom-button" bindtap="xiugaizhuangtai">确认修改</button>
-      </tui-list-cell>
+  <tui-list-cell>
+  <view class="tui-line-cell">
+    <view class="tui-title">状态</view>
+    <picker class="tui-input tui-picker" bindchange="zhuangtaiPickerChange" value="{{zhuangtaiIndex}}" range="{{zhuangtaiList}}">
+      <input class="set-right-text" value="{{ztlistpost}}" disabled name="type" />
+    </picker>
+  </view>
+  <button class="my-custom-button" bindtap="xiugaizhuangtai">确认修改</button>
+  </tui-list-cell>
     </block>
 
     <tui-list-cell >
