@@ -1,2 +1,13 @@
 <!--pages/my-order/my-order.wxml-->
-<text>pages/my-order/my-order.wxml</text>
+<view class="container">
+  <text>pages/my-order/my-order.wxml</text>
+
+  <view class="bottom-bar">
+    <view class="filter-button" bindtap="showActionSheet">
+      <tui-icon name="filter" size="28" color="#666"></tui-icon>
+      <text>筛选</text>
+    </view>
+  </view>
+
+  <tui-actionsheet show="{{showActionSheet}}" bind:click="itemClick" bind:cancel="closeActionSheet" item-list="{{actionSheetItems}}" mask-closable="{{true}}" color="#333" size="28"></tui-actionsheet>
+</view>

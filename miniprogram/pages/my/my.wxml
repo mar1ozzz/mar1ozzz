@@ -35,4 +35,13 @@
   </view>
   <tui-loadmore visible="{{loading}}" index="3" type="red"></tui-loadmore>
   <tui-nomore visible="{{!loadend}}"></tui-nomore>
+
+  <view class="bottom-bar">
+    <view class="filter-button" bindtap="showActionSheet">
+      <tui-icon name="filter" size="28" color="#666"></tui-icon>
+      <text>关于我的</text>
+    </view>
+  </view>
+
+  <tui-actionsheet show="{{showActionSheet}}" bind:click="itemClick" bind:cancel="closeActionSheet" item-list="{{actionSheetItems}}" mask-closable="{{true}}" color="#333" size="28"></tui-actionsheet>
 </view>

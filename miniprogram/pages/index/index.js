@@ -18,7 +18,19 @@ Page({
       loading: false
     },
     cacheTimeout: 5 * 60 * 1000,
-    isRefreshing: false
+    isRefreshing: false,
+    currentTab: 'post',  // 默认选中“我的发帖”
+    showActionSheet: false,
+    actionSheetItems: [{
+      text: "我的发现",
+      color: "#333"
+    }, {
+      text: "我的回复",
+      color: "#333"
+    }, {
+      text: "我的关注",
+      color: "#333"
+    }]
   },
 
   onLoad: function (option) {
@@ -317,6 +329,93 @@ Page({
       wx.stopPullDownRefresh();
       this.setData({
         isRefreshing: false
+      });
+    });
+  },
+
+  switchTab(e) {
+    const tab = e.currentTarget.dataset.tab;
+    if (tab === this.data.currentTab) return;
+    
+    this.setData({
+      currentTab: tab,
+      productList: [],
+      'option.page': 1,
+      'option.loadend': false
+    });
+
+    if (tab === 'post') {
+      app.$comm.navigateTo('/pages/my/my?searchType=1');
+    } else if (tab === 'reply') {
+      app.$comm.navigateTo('/pages/my/my?searchType=2');
+    } else if (tab === 'follow') {
+      app.$comm.navigateTo('/pages/my/my?searchType=3');
+    }
+  },
+
+  showActionSheet() {
+    console.log('showActionSheet called');
+    this.setData({
+      showActionSheet: true
+    });
+  },
+
+  closeActionSheet() {
+    console.log('closeActionSheet called');
+    this.setData({
+      showActionSheet: false
+    });
+  },
+
+  itemClick(e) {
+    console.log('itemClick called', e.detail);
+    const index = e.detail.index;
+    this.setData({
+      showActionSheet: false
+    });
+    
+    // 根据选择的选项跳转到对应页面
+    if (index === 0) {
+      // 我的发帖
+      app.$comm.navigateTo('/pages/my/my?searchType=1');
+    } else if (index === 1) {
+      // 我的回复
+      app.$comm.navigateTo('/pages/my/my?searchType=2');
+    } else if (index === 2) {
+      // 我的关注
+      app.$comm.navigateTo('/pages/my/my?searchType=3');
+    }
+  },
+
+  loadProductList(searchType = 0) {
+    if (this.data.option.loading) return;
+    
+    this.setData({
+      'option.loading': true,
+      'option.page': 1,
+      'option.loadend': false,
+      productList: []
+    });
+
+    app.$api.loadProductList({
+      page: this.data.option.page,
+      limit: this.data.option.limit,
+      searchType: searchType
+    }).then(res => {
+      if (res.code == 1) {
+        this.setData({
+          productList: res.data || [],
+          'option.loadend': !res.data || res.data.length < this.data.option.limit,
+          'option.loading': false
+        });
+      } else {
+        this.setData({
+          'option.loading': false
+        });
+      }
+    }).catch(() => {
+      this.setData({
+        'option.loading': false
       });
     });
   }

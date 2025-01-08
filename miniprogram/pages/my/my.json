@@ -3,7 +3,9 @@
   "usingComponents": {
     "product-body":"../../components/product-body/product-body",    
     "tui-loadmore": "../../components/loadmore/loadmore",
-    "tui-nomore": "../../components/nomore/nomore"
+    "tui-nomore": "../../components/nomore/nomore",
+    "tui-actionsheet": "../../components/actionsheet/actionsheet",
+    "tui-icon": "../../components/icon/icon"
   },
   "navigationBarTitleText": "网络直通车"
 }

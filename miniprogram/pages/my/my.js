@@ -28,7 +28,21 @@ Page({
       limit: 6,
       loadend: false,
       loading: false
-    }
+    },
+    showActionSheet: false,
+    actionSheetItems: [{
+      text: "我的发现",
+      color: "#333"
+    }, {
+      text: "我的回复",
+      color: "#333"
+    }, {
+      text: "我的关注",
+      color: "#333"
+    }, {
+      text: "返回列表",
+      color: "#333"
+    }]
   },
   onLoad: function (option) {
     
@@ -228,11 +242,44 @@ setResData(res){
   detail(e){
     console.log('index-detail',e)
     let post=e.detail.post
-    if(this.data.searchType==1){
-    app.$comm.navigateTo("/pages/mypost/mypost?pageType=show&id=" + post._id+"&title="+post.title+"&type="+post.type+"&content="+post.content+"&author="+post.content)
+    if(post.type == 1){
+      app.$comm.navigateTo("/pages/admin/post-update/post-update?pageType=show&id=" + post._id+"&title="+post.title+"&type="+post.type+"&content="+post.content+"&author="+post.author) 
     }else{
       app.$comm.navigateTo("/pages/admin/post-update/post-update?pageType=show&id=" + post._id+"&title="+post.title+"&type="+post.type+"&content="+post.content+"&author="+post.author) 
     }
+  },
+  showActionSheet() {
+    this.setData({
+      showActionSheet: true
+    });
+  },
+
+  closeActionSheet() {
+    this.setData({
+      showActionSheet: false
+    });
+  },
+
+  itemClick(e) {
+    const index = e.detail.index;
+    this.setData({
+      showActionSheet: false
+    });
+    
+    if (index === 0) {
+      // 我的发现
+      app.$comm.navigateTo('/pages/my/my?searchType=1');
+    } else if (index === 1) {
+      // 我的回复
+      app.$comm.navigateTo('/pages/my/my?searchType=2');
+    } else if (index === 2) {
+      // 我的关注
+      app.$comm.navigateTo('/pages/my/my?searchType=3');
+    } else if (index === 3) {
+      // 返回列表
+      wx.switchTab({
+        url: '/pages/index/index'
+      });
+    }
   }
- 
 })

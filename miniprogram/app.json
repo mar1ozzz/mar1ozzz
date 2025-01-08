@@ -20,6 +20,7 @@
         "pages/feedback/feedback",
         "pages/my-collection/my-collection",
         "pages/my-order/my-order",
+        "pages/my/my",
         "pages/admin/menu/menu",
         "pages/admin/menulist/menulist",
         "pages/admin/menu-update/menu-update",

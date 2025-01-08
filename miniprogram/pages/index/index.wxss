@@ -76,7 +76,7 @@ page {
   position: fixed;
   width: 42px;
   height: 42px;
-  bottom: 30px;
+  bottom: 120rpx;
   right: 20px;
   display: flex;
   align-items: center;
@@ -84,6 +84,7 @@ page {
   background: #fff;
   border-radius: 50%;
   box-shadow: 0 0 10rpx rgba(0,0,0,0.1);
+  z-index: 999;
 }
 
 .add {
@@ -215,6 +216,36 @@ page {
 
 .tui-middle {
   vertical-align: middle;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1rpx solid #eee;
+  box-shadow: 0 -1rpx 5rpx rgba(0,0,0,0.1);
+}
+
+.filter-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 30rpx;
+  gap: 8rpx;
+}
+
+.filter-button text {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  line-height: 1;
 }
 
 /* 隐藏scroll-view滚动条*/
