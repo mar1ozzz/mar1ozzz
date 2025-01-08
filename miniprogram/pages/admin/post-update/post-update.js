@@ -73,10 +73,25 @@ Page({
       type: "",
       content: "",     
       product_img_list: [],
-    }
+    },
+    // 新增评论相关数据
+    commentContent: '',
+    isReassign: false,
+    userList: [],
+    showUserSearch: false,
+    selectedUser: null,
+    currentStatus: '',
+    // 弹出层相关
+    showReassignPopup: false,
+    searchTimeout: null, // 搜索延迟定时器
+    allUsers: [], // 所有用户列表
+    filteredUsers: [] // 过滤后的用户列表
   },
 //加载监听
   onLoad(options) {
+    // 获取所有用户列表
+    this.getAllUsers();
+    
     let {
       id,
       info,
@@ -135,6 +150,7 @@ Page({
           wgslatitude: wgsCoords.lat.toFixed(6), // WGS84格式纬度
           wgslongitude: wgsCoords.lng.toFixed(6), // WGS84格式经度
           markers: [{
+
             id: 0,
             latitude,
             longitude,
@@ -328,4 +344,195 @@ ViewImage(e) {
   })
 },
 
+  // 评论输入处理
+  onCommentInput(e) {
+    this.setData({
+      commentContent: e.detail.value
+    });
+  },
+
+  // 转派开关处理
+  toggleReassign(e) {
+    const isChecked = e.detail.value;
+    this.setData({
+      isReassign: isChecked
+    });
+    
+    if (isChecked) {
+      this.showUserSearch();
+    } else {
+      this.setData({
+        selectedUser: null
+      });
+    }
+  },
+
+  // 显示用户搜索
+  showUserSearch() {
+    this.setData({
+      showUserSearch: true
+    });
+  },
+
+  // 隐藏用户搜索
+  hideUserSearch() {
+    this.setData({
+      showUserSearch: false
+    });
+  },
+
+  // 状态变更
+  onStatusChange(e) {
+    const index = e.detail.value;
+    this.setData({
+      currentStatus: this.data.zhuangtaiList[index]
+    });
+  },
+
+  // 提交评论
+  submitComment() {
+    if (!this.data.commentContent.trim()) {
+      wx.showToast({
+        title: '请输入回复内容',
+        icon: 'none'
+      });
+      return;
+    }
+
+    const commentData = {
+      parentId: this.data._id,
+      content: this.data.commentContent,
+      author: app.globalData.userInfo.username,
+      author_id: app.globalData.userInfo.OPENDID,
+      author_belong: app.globalData.userInfo.quxian,
+      postStatus: this.data.currentStatus || this.data.ztlistpost,
+      product_img_list: []
+    };
+
+    // 先添加评论
+    app.$api.addPostAdmin(commentData).then(res => {
+      if (res.code) {
+        // 更新帖子状态
+        const statusData = {
+          id: this.data._id,
+          当前状态: this.data.currentStatus || this.data.ztlistpost
+        };
+
+        // 如果状态不是已解决，更新待办人
+        if (commentData.postStatus !== '已解决') {
+          statusData.lastRespondent = this.data.selectedUser ? 
+            this.data.selectedUser._id : 
+            app.globalData.userInfo.OPENDID;
+        }
+
+        // 更新帖子状态
+        app.$api.setPostStatus(statusData).then(() => {
+          wx.showToast({
+            title: '回复成功',
+            icon: 'success'
+          });
+
+          // 刷新评论列表和帖子状态
+          const condition = {
+            id: this.data._id,
+            isLogin: true
+          };
+          app.$api.getPostDetail(condition).then(res => {
+            if (res.code) {
+              this.setData({
+                commentList: res.data[0].commentList,
+                ztlistpost: res.data[0].当前状态,
+                commentContent: '',
+                isReassign: false,
+                selectedUser: null,
+                currentStatus: ''
+              });
+            }
+          });
+        });
+      } else {
+        wx.showToast({
+          title: '回复失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  // 显示转派弹出层
+  showReassignPopup() {
+    this.setData({
+      showReassignPopup: true,
+      isReassign: true
+    });
+    this.searchUsers('');
+  },
+
+  // 隐藏转派弹出层
+  hideReassignPopup() {
+    this.setData({
+      showReassignPopup: false
+    });
+  },
+
+  // 阻止冒泡
+  stopPropagation() {
+    return;
+  },
+
+  // 确认转派
+  confirmReassign() {
+    if (!this.data.selectedUser) {
+      wx.showToast({
+        title: '请选择转派对象',
+        icon: 'none'
+      });
+      return;
+    }
+    this.setData({
+      showReassignPopup: false
+    });
+  },
+
+  // 选择用户
+  selectUser(e) {
+    const user = e.currentTarget.dataset.user;
+    this.setData({
+      selectedUser: user,
+      isReassign: true
+    });
+  },
+  getAllUsers() {
+    app.$api.getUserlist({
+      page: 1,
+      limit: 9999
+    }).then(res => {
+      if (res.code) {
+        this.setData({
+          allUsers: res.data,
+          filteredUsers: res.data
+        });
+      }
+    });
+  },
+  // 搜索用户
+  onSearchInput(e) {
+    const keyword = e.detail.value.toLowerCase().trim();
+    const filteredUsers = this.data.allUsers.filter(user => {
+      return user.username.toLowerCase().includes(keyword) ||
+             user.quxian.toLowerCase().includes(keyword);
+    });
+    this.setData({
+      filteredUsers: filteredUsers
+    });
+  },
+
+  // 选择用户
+  selectUser(e) {
+    const user = e.currentTarget.dataset.user;
+    this.setData({
+      selectedUser: user,
+      showUserSearch: false
+    });
+  },
 })
