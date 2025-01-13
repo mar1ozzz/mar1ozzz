@@ -81,7 +81,8 @@ Page({
   },
 
   handleStatusChange(e) {
-    const status = parseInt(e.currentTarget.dataset.status);
+    const status = parseInt(e.currentTarget.dataset.index); // 使用 data-index
+    console.log('当前状态:', status); // 调试日志
     this.setData({
       currentStatus: status,
       'option.page': 1,
@@ -201,18 +202,19 @@ Page({
         let proList = res.data || [];
         
         if (this.data.currentStatus !== 0) {
-          const pendingStatus = new Set(['待回复', '规划中', '暂挂中', '建设中', '待处理']);
+          const pendingStatus = new Set(['待回复', '建设中', '规划中', '暂挂中', '待处理']);
           const completedStatus = new Set(['已解决']);
           
           proList = proList.filter(item => {
-            let itemStatus = item.status || item.当前状态 || '待处理';
+            let itemStatus = item.当前状态 || '待处理'; // 确保使用“当前状态”字段
             
             if (this.data.currentStatus === 1) {
-              return pendingStatus.has(itemStatus);
+              return pendingStatus.has(itemStatus); // 显示待处理
             } else {
-              return completedStatus.has(itemStatus);
+              return completedStatus.has(itemStatus); // 显示已处理
             }
           });
+          console.log('过滤后的帖子列表:', proList); // 调试日志
         }
 
         const newList = this.data.productList.length > 0 
