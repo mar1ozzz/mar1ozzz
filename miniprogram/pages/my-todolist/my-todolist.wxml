@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="todo-list">
+    <block wx:for="{{todoList}}" wx:key="_id">
+      <view class="todo-item" bindtap="itemClick" data-item="{{item}}">
+        <view class="todo-header">
+          <text class="todo-type {{item.todoType === '转派待办' ? 'transfer' : 'normal'}}">{{item.todoType}}</text>
+          <text class="todo-time">{{item.updateTime}}</text>
+        </view>
+        <view class="todo-content">
+          <text class="todo-title">{{item.title || '无标题'}}</text>
+          <text class="todo-desc">{{item.content}}</text>
+        </view>
+        <view class="todo-footer">
+          <text class="todo-status">状态: {{item.lastComment.status || '待处理'}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+  
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+  <view class="no-more" wx:if="{{loadEnd && todoList.length > 0}}">没有更多了</view>
+  <view class="empty" wx:if="{{!loading && todoList.length === 0}}">
+    <text>暂无待办事项</text>
+  </view>
+</view>

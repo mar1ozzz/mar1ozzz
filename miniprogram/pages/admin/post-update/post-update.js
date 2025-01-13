@@ -399,34 +399,50 @@ ViewImage(e) {
       return;
     }
 
+    // 检查是否选择了状态
+    if (!this.data.currentStatus) {
+      wx.showToast({
+        title: '请您选择问题当前状态',
+        icon: 'none'
+      });
+      return;
+    }
+
     const commentData = {
       parentId: this.data._id,
       content: this.data.commentContent,
       author: app.globalData.userInfo.username,
-      author_id: app.globalData.userInfo.OPENDID,
+      author_id: app.globalData.userInfo.OPENID,
       author_belong: app.globalData.userInfo.quxian,
-      postStatus: this.data.currentStatus || this.data.ztlistpost,
-      product_img_list: []
+      postStatus: this.data.currentStatus,
+      product_img_list: [],
+      atUser: '',
+      atOpenid: ''
     };
+
+    // 如果是转派，添加@用户信息
+    if (this.data.selectedUser) {
+      commentData.atUser = `${this.data.selectedUser.username}${this.data.selectedUser.quxian}`;
+      commentData.atOpenid = this.data.selectedUser.OPENID;
+      console.log('添加@用户信息:', { atUser: commentData.atUser, atOpenid: commentData.atOpenid });
+    }
+
+    console.log('提交评论数据:', commentData);
 
     // 先添加评论
     app.$api.addPostAdmin(commentData).then(res => {
+      console.log('评论提交结果:', res);
       if (res.code) {
         // 更新帖子状态
         const statusData = {
           id: this.data._id,
-          当前状态: this.data.currentStatus || this.data.ztlistpost
+          当前状态: this.data.currentStatus
         };
-
-        // 如果状态不是已解决，更新待办人
-        if (commentData.postStatus !== '已解决') {
-          statusData.lastRespondent = this.data.selectedUser ? 
-            this.data.selectedUser._id : 
-            app.globalData.userInfo.OPENDID;
-        }
+        console.log('更新帖子状态数据:', statusData);
 
         // 更新帖子状态
-        app.$api.setPostStatus(statusData).then(() => {
+        app.$api.setPostStatus(statusData).then((statusRes) => {
+          console.log('状态更新结果:', statusRes);
           wx.showToast({
             title: '回复成功',
             icon: 'success'
@@ -438,6 +454,7 @@ ViewImage(e) {
             isLogin: true
           };
           app.$api.getPostDetail(condition).then(res => {
+            console.log('刷新帖子详情:', res);
             if (res.code) {
               this.setData({
                 commentList: res.data[0].commentList,
@@ -497,10 +514,30 @@ ViewImage(e) {
   // 选择用户
   selectUser(e) {
     const user = e.currentTarget.dataset.user;
+    console.log('选择的用户信息:', user);
+    
     this.setData({
       selectedUser: user,
-      isReassign: true
+      showUserSearch: false,
+      showReassignPopup: false
     });
+
+    // 在评论内容开头添加@信息
+    const atText = `@${user.username}${user.quxian} `;
+    let content = this.data.commentContent || '';
+    
+    console.log('当前评论内容:', content);
+    console.log('要添加的@文本:', atText);
+    
+    // 检查是否已经有@信息
+    if (!content.includes(atText)) {
+      content = atText + content;
+      this.setData({
+        commentContent: content
+      });
+    }
+    
+    console.log('更新后的评论内容:', this.data.commentContent);
   },
   getAllUsers() {
     app.$api.getUserlist({
@@ -524,15 +561,6 @@ ViewImage(e) {
     });
     this.setData({
       filteredUsers: filteredUsers
-    });
-  },
-
-  // 选择用户
-  selectUser(e) {
-    const user = e.currentTarget.dataset.user;
-    this.setData({
-      selectedUser: user,
-      showUserSearch: false
     });
   },
 })

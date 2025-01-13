@@ -30,6 +30,9 @@ Page({
     }, {
       text: "我的关注",
       color: "#333"
+    }, {
+      text: "我的待办",
+      color: "#333"
     }]
   },
 
@@ -384,6 +387,11 @@ Page({
     } else if (index === 2) {
       // 我的关注
       app.$comm.navigateTo('/pages/my/my?searchType=3');
+    } else if (index === 3) {
+      // 我的待办
+      wx.navigateTo({
+        url: '/pages/my-todolist/my-todolist'
+      })
     }
   },
 

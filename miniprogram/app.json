@@ -21,6 +21,7 @@
         "pages/my-collection/my-collection",
         "pages/my-order/my-order",
         "pages/my/my",
+        "pages/my-todolist/my-todolist",
         "pages/admin/menu/menu",
         "pages/admin/menulist/menulist",
         "pages/admin/menu-update/menu-update",
@@ -50,10 +51,10 @@
         "backgroundColor": "#fff",
         "list": [
             {
-              "pagePath": "pages/map/map",
-              "text": "地图",
-              "iconPath": "static/icon/地图13.png",
-              "selectedIconPath": "static/icon/地图14.png"
+                "pagePath": "pages/map/map",
+                "text": "地图",
+                "iconPath": "static/icon/地图13.png",
+                "selectedIconPath": "static/icon/地图14.png"
             },
             {
                 "pagePath": "pages/index/index",
@@ -84,8 +85,12 @@
       
     ],
     "permission": {
-      "scope.userLocation": {"desc": "位置信息将用于提取经纬度"},
-      "scope.userFuzzyLocation": {"desc": "位置信息将用于提取经纬度"}
+        "scope.userLocation": {
+            "desc": "位置信息将用于提取经纬度"
+        },
+        "scope.userFuzzyLocation": {
+            "desc": "位置信息将用于提取经纬度"
+        }
     },
     "usingComponents": {
         "tui-icon": "/components/icon/icon",

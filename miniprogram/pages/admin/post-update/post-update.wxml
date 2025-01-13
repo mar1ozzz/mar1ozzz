@@ -51,15 +51,6 @@
       </view>
     </tui-list-cell>
 
-    <tui-list-cell>
-      <view class="tui-line-cell">
-        <view class="tui-title">详情</view>
-        <view class="uni-textarea">
-          <textarea bindconfirm="confirmTextArea" placeholder="详细信息....." maxlength="-1" auto-height="true" class="textarea-ui" value="{{content}}" name="content" show-confirm-bar="{{true}}" placeholder-class="placeholderText" bindinput="bindTextarea" disabled="{{pageType=='show'}}" />
-        </view>
-      </view>
-    </tui-list-cell>
-
     <tui-list-cell hover="{{false}}" last="{{true}}">
       <view class="img-body">
         <view class="img-header">
@@ -96,7 +87,7 @@
           <!-- 状态选择 -->
           <view class="status-section">
             <text>处理状态：</text>
-            <picker mode="selector" range="{{zhuangtaiList}}" bindchange="onStatusChange">
+            <picker mode="selector" range="{{zhuangtaiList}}" bindchange="onStatusChange" class="status-picker custom-picker">
               <view class="status-picker">{{currentStatus || '请选择状态'}}</view>
             </picker>
           </view>
