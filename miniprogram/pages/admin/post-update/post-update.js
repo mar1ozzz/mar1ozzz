@@ -582,5 +582,19 @@ Page({
     this.setData({
       filteredUsers: filteredUsers
     });
-  }
+  },
+
+  // 复制经纬度的函数
+  copyLL: function() {
+    const { longitude, latitude } = this.data;
+    wx.setClipboardData({
+      data: `${longitude}, ${latitude}`,
+      success: function() {
+        wx.showToast({
+          title: '经纬度已复制!',
+          icon: 'success'
+        });
+      }
+    });
+  },
 });

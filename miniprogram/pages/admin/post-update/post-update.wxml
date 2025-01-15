@@ -2,7 +2,7 @@
 <view wx:if="{{pageType=='add' || pageType=='show'}}">
   <view class="map-container" wx:if="{{latitude && longitude}}">
     <map id="postMap" 
-      style="width: 100%; height: 280px;" 
+      style="width: 100%; height: 180px;" 
       latitude="{{latitude}}" 
       longitude="{{longitude}}" 
       markers="{{markers}}"
@@ -34,9 +34,9 @@
       </view>
     </view>
   </view>
-  <view class="location-view" wx:if="{{pageType=='add'}}">
-    <text class="location-text">经度：{{wgslongitude}}</text>
-    <text class="location-text">纬度：{{wgslatitude}}</text>
+  <view class="location-view">
+    <text class="location-text">经度：{{longitude}}</text>
+    <text class="location-text">纬度：{{latitude}}</text>
   </view>
 </view>
 
@@ -51,12 +51,10 @@
             <input placeholder-class="phcolor" value="{{title}}" class="tui-input" name="title" disabled="{{pageType=='show'}}" placeholder="请输入标题" type="text" />
           </view>
           
-          <!-- 分类选择 -->
-          <view class="classify-picker-wrapper">
-            <view class="tui-title">分类</view>
-            <picker class="tui-picker" bindchange="classifyPickerChange" value="{{classifyIndex}}" range="{{classifyList}}" disabled="{{pageType=='show'}}">
-              <input class="classify-input" value="{{classifyList[classifyIndex]}}" disabled name="type" />
-            </picker>
+          <!-- 复制经纬度 -->
+          <view class="copy-ll-wrapper" style="display: flex;align-items: center;">
+            <view class="tui-title" style="font-size: 18px;"></view>
+            <button class="copy-ll-btn" style="font-size: 11px;" bindtap="copyLL">复制经纬度</button>
           </view>
         </view>
       </view>
