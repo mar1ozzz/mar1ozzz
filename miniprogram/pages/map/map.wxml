@@ -16,15 +16,15 @@
   <!-- 图例 -->
   <view class="map-legend">
     <view class="legend-item">
-      <image src="../../static/icon/规建.png" class="legend-icon"></image>
-      <text>已规划</text>
+      <image src="../../static/icon/规划中.png" class="legend-icon"></image>
+      <text>规划中</text>
     </view>
     <view class="legend-item">
-      <image src="../../static/icon/规建.png" class="legend-icon"></image>
+      <image src="../../static/icon/建设中.png" class="legend-icon"></image>
       <text>建设中</text>
     </view>
     <view class="legend-item">
-      <image src="../../static/icon/待回复.png" class="legend-icon"></image>
+      <image src="../../static/icon/暂挂中.png" class="legend-icon"></image>
       <text>暂挂中</text>
     </view>
     <view class="legend-item">
