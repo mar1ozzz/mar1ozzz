@@ -120,7 +120,7 @@ Page({
   toRegist() {
     app.$comm.navigateTo("/pages/regist/regist?pageType=update")
   },
-
+// 
   toCollectionHandle() {
     app.$comm.navigateTo("/pages/my-collection/my-collection")
   },
@@ -136,15 +136,25 @@ Page({
       content: '是否确定退出登录？',
       success: (res) => {
         if (res.confirm) {
+          // 清除所有登录相关信息
           app.$db.del("userInfo")
-          app.globalData.userInfo = {}
-          app.globalData.isLogin = false
+          wx.clearStorageSync()  // 清除所有存储
+          
+          // 重置全局状态
+          app.globalData = {
+            userInfo: {},
+            isLogin: false
+          }
+          
+          // 重置页面状态
           this.setData({
-            isLogin: app.globalData.isLogin,
-            userInfo: app.globalData.userInfo
+            isLogin: false,
+            userInfo: {}
           })
-          app.$comm.successToShow("退出登录成功", () => {
-            app.$comm.reLaunch("/pages/preorder/preorder")
+
+          // 跳转到审核页面
+          wx.redirectTo({
+            url: '/pages/regist/regist?pageType=regist&nocheck=1'
           })
         }
       }

@@ -1,6 +1,5 @@
 import * as $db from './db.js'
 
-
 //全局请求遮罩
 var needLoadingRequestCount = 0;
 
@@ -23,6 +22,7 @@ function tryHideFullScreenLoading() {
 const callFunction = function (name, $url, data = {}, option = {
   showLoading: true
 }) {
+  console.log(`调用云函数 ${name}.${$url}，参数：`, data)
 
   let isLogin = $db.get("userInfo") ? true : false
   data.isLogin = isLogin;
@@ -34,11 +34,14 @@ const callFunction = function (name, $url, data = {}, option = {
     let optionData = Object.assign(data, {
       $url
     })
+    console.log('发送到云函数的完整数据：', optionData)
+    
     wx.cloud.callFunction({
         name,
         data: optionData
       })
       .then(res => {
+        console.log(`云函数 ${name}.${$url} 返回结果：`, res)
         if (option.showLoading) {
           tryHideFullScreenLoading()
         }
@@ -47,6 +50,7 @@ const callFunction = function (name, $url, data = {}, option = {
         }
       })
       .catch(err => {
+        console.error(`云函数 ${name}.${$url} 调用失败：`, err)
         if (option.showLoading) {
           tryHideFullScreenLoading()
         }
@@ -59,7 +63,6 @@ const callFunction = function (name, $url, data = {}, option = {
  * 用户的请求
  */
 const userCallFunction = callFunction.bind(null, 'user')
-
 
 //主页热门搜索
 export const getIndexHotSearch = (data) => userCallFunction('getIndexHotSearch', data);
@@ -159,9 +162,6 @@ export const setPostStatus = (data) => userCallFunction('setPostStatus', data);
 
 //数据汇总
 export const getPostAggreate = (data) => userCallFunction('getPostAggreate', data);
-
-
-
 
 
 /**

@@ -37,3 +37,32 @@
     </view>
   </view>
 </view>
+
+<!-- 个人待处理统计表格 -->
+<view class="table-container" style="margin-top: 20px;">
+  <view class="table">
+    <view class="table-header">
+      <text class="header-item">处理人</text>
+      <text class="header-item">待处理数量</text>
+      <text class="header-item">已处理数量</text>
+      <text class="header-item">处理率</text>
+    </view>
+    <view class="table-body">
+      <block wx:for="{{personStats}}" wx:key="username">
+        <view class="table-row">
+          <text class="row-item">{{item.username}}</text>
+          <text class="row-item" style="color: {{item.pendingCount > 0 ? 'red' : 'black'}}">{{item.pendingCount}}</text>
+          <text class="row-item">{{item.solvedCount}}</text>
+          <text class="row-item">{{item.rate}}</text>
+        </view>
+      </block>
+      <!-- Person Total Row -->
+      <view class="table-row total-row">
+        <text class="row-item">总计</text>
+        <text class="row-item" style="color: {{personTotal.pendingCount > 0 ? 'red' : 'black'}}">{{personTotal.pendingCount}}</text>
+        <text class="row-item">{{personTotal.solvedCount}}</text>
+        <text class="row-item">{{personTotal.rate}}</text>
+      </view>
+    </view>
+  </view>
+</view>

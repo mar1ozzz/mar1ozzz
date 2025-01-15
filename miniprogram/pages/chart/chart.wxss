@@ -3,6 +3,9 @@
   display: flex;
   justify-content: space-between; /* 水平两端对齐 */
   align-items: center; /* 垂直居中 */
+  font-family: "SF Pro Text", "SF Pro Display", -apple-system, "PingFang SC", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .table {
