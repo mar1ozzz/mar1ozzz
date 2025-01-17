@@ -379,19 +379,19 @@ Page({
   },
 
   selectLocation: function(e) {
-    const { latitude, longitude } = e.currentTarget.dataset;
-    
-    // 创建临时标记
+    const { latitude, longitude } = e.currentTarget.dataset; // 获取 GCJ02 坐标
+  
+    // 创建临时标记，使用 GCJ02 坐标
     const tempMarker = {
       id: 'temp',
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude, // 使用 GCJ02 纬度
+      longitude: longitude, // 使用 GCJ02 经度
       iconPath: "../../static/icon/待回复.png",
       width: 30,
       height: 30
     };
-
-    // 更新地图中心点位置和标记
+  
+    // 更新地图中心点位置和标记，使用 GCJ02 坐标
     this.setData({
       latitude: latitude,
       longitude: longitude,
@@ -399,26 +399,26 @@ Page({
       searchKeyword: '',
       markers: [...this.data.markers.filter(m => m.id !== 'temp'), tempMarker] // 移除旧的临时标记，添加新的
     });
-
-    // 创建地图上下文并移动到选中位置
+  
+    // 创建地图上下文并移动到选中位置，使用 GCJ02 坐标
     const mapContext = wx.createMapContext('myMap');
     mapContext.moveToLocation({
       latitude: latitude,
       longitude: longitude,
       success: () => {
-        // 设置地图缩放级别（scale范围：3-20）
-        // 数字越大，显示的越详细
+        // 设置地图缩放级别
         this.setData({
           scale: 16  // 设置适中的缩放级别
         });
       }
     });
-
-    // 显示表单
-    this.setData({
+  
+    // 显示表单，使用 WGS84 坐标
+    const wgsCoords = gcj02towgs84(longitude, latitude); // 将 GCJ02 转换为 WGS84
+    that.setData({
       showForm: true,
-      wgslatitude: latitude.toFixed(5),
-      wgslongitude: longitude.toFixed(5)
+      wgslatitude: parseFloat(wgsCoords.lat.toFixed(5)), // 使用转换后的纬度
+      wgslongitude: parseFloat(wgsCoords.lng.toFixed(5)) // 使用转换后的经度
     });
   },
 
