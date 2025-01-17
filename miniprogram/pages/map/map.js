@@ -96,11 +96,24 @@ Page({
     },
     product_img_list: [],
     classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆'],
-    classifyIndex: 0
+    classifyIndex: 0,
+    searchKeyword: '',
+    searchResults: [],
+    showSearchResults: false,
+    hideTip: false,
+    scale: 8,
+    enableSatellite: false
   },
 
   onLoad: function(options) {
     this.getdata();
+    
+    // 30秒后隐藏提示栏
+    setTimeout(() => {
+      this.setData({
+        hideTip: true
+      });
+    }, 30000);
   },
 
   getdata: function() {
@@ -302,8 +315,123 @@ Page({
     });
   },
 
-  preventTouchMove() {
+  preventTouchMove: function() {
     // 阻止滑动穿透
     return;
-  }
+  },
+
+  onSearch: function() {
+    const keyword = this.data.searchKeyword;
+    if (!keyword.trim()) {
+      wx.showToast({
+        title: '请输入搜索关键词',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.showLoading({
+      title: '搜索中...'
+    });
+
+    const url = `https://apis.map.qq.com/ws/place/v1/search?boundary=nearby(${this.data.latitude},${this.data.longitude},1000)&keyword=${encodeURIComponent(keyword)}&page_size=10&page_index=1&key=WSHBZ-AVDCL-XVQPC-MBUNI-MB4XS-KVBAZ`;
+    
+    wx.request({
+      url: url,
+      success: (res) => {
+        if (res.data.status === 0 && res.data.data.length > 0) {
+          const searchResults = res.data.data.map(item => ({
+            name: item.title,
+            address: item.address,
+            latitude: item.location.lat,
+            longitude: item.location.lng
+          }));
+          
+          this.setData({
+            searchResults,
+            showSearchResults: true
+          });
+        } else {
+          wx.showToast({
+            title: '未找到相关位置',
+            icon: 'none'
+          });
+        }
+      },
+      fail: (error) => {
+        console.error(error);
+        wx.showToast({
+          title: '搜索失败',
+          icon: 'none'
+        });
+      },
+      complete: () => {
+        wx.hideLoading();
+      }
+    });
+  },
+
+  onInput: function(event) {
+    this.setData({ 
+      searchKeyword: event.detail.value,
+      showSearchResults: false 
+    });
+  },
+
+  selectLocation: function(e) {
+    const { latitude, longitude } = e.currentTarget.dataset;
+    
+    // 创建临时标记
+    const tempMarker = {
+      id: 'temp',
+      latitude: latitude,
+      longitude: longitude,
+      iconPath: "../../static/icon/待回复.png",
+      width: 30,
+      height: 30
+    };
+
+    // 更新地图中心点位置和标记
+    this.setData({
+      latitude: latitude,
+      longitude: longitude,
+      showSearchResults: false,
+      searchKeyword: '',
+      markers: [...this.data.markers.filter(m => m.id !== 'temp'), tempMarker] // 移除旧的临时标记，添加新的
+    });
+
+    // 创建地图上下文并移动到选中位置
+    const mapContext = wx.createMapContext('myMap');
+    mapContext.moveToLocation({
+      latitude: latitude,
+      longitude: longitude,
+      success: () => {
+        // 设置地图缩放级别（scale范围：3-20）
+        // 数字越大，显示的越详细
+        this.setData({
+          scale: 16  // 设置适中的缩放级别
+        });
+      }
+    });
+
+    // 显示表单
+    this.setData({
+      showForm: true,
+      wgslatitude: latitude.toFixed(5),
+      wgslongitude: longitude.toFixed(5)
+    });
+  },
+
+  closeSearchResults: function() {
+    this.setData({
+      showSearchResults: false,
+      searchKeyword: ''
+    });
+  },
+
+  toggleMapType: function() {
+    this.setData({
+      enableSatellite: !this.data.enableSatellite
+    });
+  },
 });

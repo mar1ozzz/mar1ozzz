@@ -161,50 +161,70 @@ Page({
     }
   },
   
-  getPostData: function () {
-    const db = wx.cloud.database();
-    const _ = db.command;
+  // 添加下拉刷新处理函数
+  async onPullDownRefresh() {
+    try {
+      wx.showNavigationBarLoading(); // 显示导航栏加载动画
 
-    // 先获取所有用户
-    db.collection('user').where({
-      isGrant: 'true'  // 只统计已审核的用户
-    }).get().then(userRes => {
-      const users = userRes.data;
+      // 重新获取数据
+      await Promise.all([
+        this.getPostData(),
+        this.getTodoStats()
+      ]);
+
+      wx.showToast({
+        title: '刷新成功',
+        icon: 'success',
+        duration: 1000
+      });
+    } catch (error) {
+      console.error('刷新失败:', error);
+      wx.showToast({
+        title: '刷新失败',
+        icon: 'error',
+        duration: 1000
+      });
+    } finally {
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+      wx.hideNavigationBarLoading();
+    }
+  },
+
+  // 修改 getPostData 方法，使其返回 Promise
+  getPostData: function() {
+    return new Promise((resolve, reject) => {
+      const db = wx.cloud.database();
+      const _ = db.command;
+
+      // 先获取所有用户
+      db.collection('user').where({
+        isGrant: 'true'  // 只统计已审核的用户
+      }).get().then(userRes => {
+        const users = userRes.data;
+        
+        // 获取所有帖子
+        const MAX_LIMIT = 20;
+        db.collection('post').count().then(res => {
+          const totalCount = res.total;
+          const batchTimes = Math.ceil(totalCount / MAX_LIMIT);
       
-      // 获取所有帖子
-      const MAX_LIMIT = 20;
-      db.collection('post').count().then(res => {
-        const totalCount = res.total;
-        const batchTimes = Math.ceil(totalCount / MAX_LIMIT);
-    
-        const tasks = [];
-        for (let i = 0; i < batchTimes; i++) {
-          const promise = db.collection('post').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get();
-          tasks.push(promise);
-        }
-    
-        Promise.all(tasks).then(res => {
-          const posts = [];
-          res.forEach(item => {
-            posts.push(...item.data);
-          });
-    
-          // 部门统计
-          const authorList = [...new Set(posts.map(item => item.author_belong))];
-          const tableData = [];
-          const total = {
-            A: 0,
-            B: 0,
-            C: 0,
-            D: 0,
-            E: 0,
-            total: 0,
-            rate: '0%'
-          };
-    
-          authorList.forEach(author => {
-            const counts = {
-              author: author,
+          const tasks = [];
+          for (let i = 0; i < batchTimes; i++) {
+            const promise = db.collection('post').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get();
+            tasks.push(promise);
+          }
+      
+          Promise.all(tasks).then(res => {
+            const posts = [];
+            res.forEach(item => {
+              posts.push(...item.data);
+            });
+      
+            // 部门统计
+            const authorList = [...new Set(posts.map(item => item.author_belong))];
+            const tableData = [];
+            const total = {
               A: 0,
               B: 0,
               C: 0,
@@ -213,50 +233,64 @@ Page({
               total: 0,
               rate: '0%'
             };
-    
-            posts.forEach(item => {
-              if (item.author_belong === author) {
-                switch (item['当前状态']) {
-                  case '待回复':
-                    counts.A++;
-                    total.A++;
-                    break;
-                  case '规划中':
-                    counts.B++;
-                    total.B++;
-                    break;
-                  case '建设中':
-                    counts.C++;
-                    total.C++;
-                    break;
-                  case '暂挂中':
-                    counts.D++;
-                    total.D++;
-                    break;
-                  case '已解决':
-                    counts.E++;
-                    total.E++;
-                    break;
-                  default:
-                    break;
+      
+            authorList.forEach(author => {
+              const counts = {
+                author: author,
+                A: 0,
+                B: 0,
+                C: 0,
+                D: 0,
+                E: 0,
+                total: 0,
+                rate: '0%'
+              };
+      
+              posts.forEach(item => {
+                if (item.author_belong === author) {
+                  switch (item['当前状态']) {
+                    case '待回复':
+                      counts.A++;
+                      total.A++;
+                      break;
+                    case '规划中':
+                      counts.B++;
+                      total.B++;
+                      break;
+                    case '建设中':
+                      counts.C++;
+                      total.C++;
+                      break;
+                    case '暂挂中':
+                      counts.D++;
+                      total.D++;
+                      break;
+                    case '已解决':
+                      counts.E++;
+                      total.E++;
+                      break;
+                    default:
+                      break;
+                  }
                 }
-              }
+              });
+
+              counts.total = counts.A + counts.B + counts.C + counts.D + counts.E;
+              counts.rate = counts.total > 0 ? Math.round((counts.E / counts.total) * 100) + '%' : '0%';
+              tableData.push(counts);
             });
 
-            counts.total = counts.A + counts.B + counts.C + counts.D + counts.E;
-            counts.rate = counts.total > 0 ? Math.round((counts.E / counts.total) * 100) + '%' : '0%';
-            tableData.push(counts);
-          });
+            total.total = total.A + total.B + total.C + total.D + total.E;
+            total.rate = total.total > 0 ? Math.round((total.E / total.total) * 100) + '%' : '0%';
 
-          total.total = total.A + total.B + total.C + total.D + total.E;
-          total.rate = total.total > 0 ? Math.round((total.E / total.total) * 100) + '%' : '0%';
-
-          this.setData({
-            tableData,
-            total
-          });
-        });
-      });
+            this.setData({
+              tableData,
+              total
+            });
+            resolve(); // 完成后 resolve
+          }).catch(reject);
+        }).catch(reject);
+      }).catch(reject);
     });
   }
 });

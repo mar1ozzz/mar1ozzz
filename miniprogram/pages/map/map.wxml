@@ -1,17 +1,61 @@
 <view class="container">
-  <view class="tip-bar">请点击地图选择你要反映的问题区域。</view>
+  <!-- 搜索框移到最上面 -->
+  <view class="search-box">
+    <input 
+      class="search-input" 
+      placeholder="搜索位置" 
+      value="{{searchKeyword}}"
+      bindinput="onInput"
+    />
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+
+  <!-- tip-bar放在搜索框下面 -->
+  <view class="tip-bar {{hideTip ? 'hide' : ''}}">
+    <scroll-view scroll-x enable-flex class="tip-scroll" enhanced show-scrollbar="false">
+      <text class="tip-text">请点击地图选择你要反映的问题区域。温馨提示：请准确定位，详细描述问题，便于及时处理。</text>
+    </scroll-view>
+  </view>
+
+  <!-- 搜索结果列表 -->
+  <view class="search-results {{showSearchResults ? 'show' : ''}}" wx:if="{{showSearchResults}}">
+    <view class="results-header">
+      <text>搜索结果</text>
+      <text class="close-results" bindtap="closeSearchResults">×</text>
+    </view>
+    <scroll-view scroll-y class="results-list">
+      <view 
+        class="result-item" 
+        wx:for="{{searchResults}}" 
+        wx:key="index"
+        bindtap="selectLocation"
+        data-latitude="{{item.latitude}}"
+        data-longitude="{{item.longitude}}"
+      >
+        <view class="result-name">{{item.name}}</view>
+        <view class="result-address">{{item.address}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
   <!-- 地图组件 -->
   <map 
     id="myMap"
     longitude="{{longitude}}" 
     latitude="{{latitude}}" 
-    scale="8"
+    scale="{{scale}}" 
     markers="{{markers}}"
     bindmarkertap="detail"
     bindtap="onMapTap"
     show-location 
+    enable-satellite="{{enableSatellite}}"
     class="map {{showForm ? 'map-half' : ''}}"
   ></map>
+
+  <!-- 添加地图类型切换按钮 -->
+  <view class="map-type-btn" bindtap="toggleMapType">
+    <text>{{enableSatellite ? '普通地图' : '卫星地图'}}</text>
+  </view>
 
   <!-- 图例 -->
   <view class="map-legend">
