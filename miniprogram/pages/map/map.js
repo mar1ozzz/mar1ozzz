@@ -149,7 +149,7 @@ Page({
             case '已解决':iconPath = "../../static/icon/已解决.png";
               break;
           }
-          let [gcjLng, gcjLat] = wgs84togcj02(item.经度, item.纬度);
+          let [gcjLng, gcjLat] = app.coordTransform.toGCJ02(item.经度, item.纬度);
           const markerId = this.data.markers.length + index;
         return {
           id: markerId, 
@@ -194,15 +194,15 @@ Page({
   },
 
   onMapTap: function(e) {
-    console.log('地图被点击：', e.detail);
-    const { latitude, longitude } = e.detail;
+    const { latitude, longitude } = e.detail;  // 从地图获取的是GCJ02
+    let wgsCoords = app.coordTransform.toWGS84(longitude, latitude);
     
     // 添加临时标记
     const markers = this.data.markers.filter(m => m.id !== 'temp');
     markers.push({
       id: 'temp',
-      latitude,
-      longitude,
+      latitude: parseFloat(latitude.toFixed(6)),
+      longitude: parseFloat(longitude.toFixed(6)),
       iconPath: "../../static/icon/待回复.png",
       width: 30,
       height: 30
@@ -211,8 +211,8 @@ Page({
     this.setData({
       markers,
       showForm: true,
-      wgslatitude: latitude.toFixed(5),
-      wgslongitude: longitude.toFixed(5)
+      wgslatitude: wgsCoords.lat,  // 已经在转换工具中处理过小数位
+      wgslongitude: wgsCoords.lng
     });
   },
 

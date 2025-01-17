@@ -1,99 +1,4 @@
-let app = getApp()
-
-// WGS84转GCJ02
-function wgs84togcj02(wgsLng, wgsLat) {
-  const PI = 3.14159265358979324;
-  const A = 6378245.0;
-  const EE = 0.00669342162296594323;
-
-  function out_of_china(lng, lat) {
-    if (lng < 72.004 || lng > 137.8347) return true;
-    if (lat < 0.8293 || lat > 55.8271) return true;
-    return false;
-  }
-
-  function transformLat(x, y) {
-    let ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
-    ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
-    ret += (20.0 * Math.sin(y * PI) + 40.0 * Math.sin(y / 3.0 * PI)) * 2.0 / 3.0;
-    ret += (160.0 * Math.sin(y / 12.0 * PI) + 320 * Math.sin(y * PI / 30.0)) * 2.0 / 3.0;
-    return ret;
-  }
-
-  function transformLng(x, y) {
-    let ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
-    ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
-    ret += (20.0 * Math.sin(x * PI) + 40.0 * Math.sin(x / 3.0 * PI)) * 2.0 / 3.0;
-    ret += (150.0 * Math.sin(x / 12.0 * PI) + 300.0 * Math.sin(x / 30.0 * PI)) * 2.0 / 3.0;
-    return ret;
-  }
-
-  if (out_of_china(wgsLng, wgsLat)) {
-    return [wgsLng, wgsLat];
-  }
-
-  let dLat = transformLat(wgsLng - 105.0, wgsLat - 35.0);
-  let dLng = transformLng(wgsLng - 105.0, wgsLat - 35.0);
-  let radLat = wgsLat / 180.0 * PI;
-  let magic = Math.sin(radLat);
-  magic = 1 - EE * magic * magic;
-  let sqrtMagic = Math.sqrt(magic);
-  dLat = (dLat * 180.0) / ((A * (1 - EE)) / (magic * sqrtMagic) * PI);
-  dLng = (dLng * 180.0) / (A / sqrtMagic * Math.cos(radLat) * PI);
-  let gcjLat = wgsLat + dLat;
-  let gcjLng = wgsLng + dLng;
-  return [gcjLng, gcjLat];
-}
-
-// GCJ02转WGS84
-function gcj02towgs84(gcjLng, gcjLat) {
-  const PI = 3.14159265358979324;
-  const A = 6378245.0;
-  const EE = 0.00669342162296594323;
-
-  function out_of_china(lng, lat) {
-    if (lng < 72.004 || lng > 137.8347) return true;
-    if (lat < 0.8293 || lat > 55.8271) return true;
-    return false;
-  }
-
-  function transformLat(x, y) {
-    let ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
-    ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
-    ret += (20.0 * Math.sin(y * PI) + 40.0 * Math.sin(y / 3.0 * PI)) * 2.0 / 3.0;
-    ret += (160.0 * Math.sin(y / 12.0 * PI) + 320 * Math.sin(y * PI / 30.0)) * 2.0 / 3.0;
-    return ret;
-  }
-
-  function transformLng(x, y) {
-    let ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
-    ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
-    ret += (20.0 * Math.sin(x * PI) + 40.0 * Math.sin(x / 3.0 * PI)) * 2.0 / 3.0;
-    ret += (150.0 * Math.sin(x / 12.0 * PI) + 300.0 * Math.sin(x / 30.0 * PI)) * 2.0 / 3.0;
-    return ret;
-  }
-
-  if (out_of_china(gcjLng, gcjLat)) {
-    return {
-      lat: gcjLat,
-      lng: gcjLng
-    };
-  }
-
-  let dLat = transformLat(gcjLng - 105.0, gcjLat - 35.0);
-  let dLng = transformLng(gcjLng - 105.0, gcjLat - 35.0);
-  let radLat = gcjLat / 180.0 * PI;
-  let magic = Math.sin(radLat);
-  magic = 1 - EE * magic * magic;
-  let sqrtMagic = Math.sqrt(magic);
-  dLat = (dLat * 180.0) / ((A * (1 - EE)) / (magic * sqrtMagic) * PI);
-  dLng = (dLng * 180.0) / (A / sqrtMagic * Math.cos(radLat) * PI);
-  
-  return {
-    lat: gcjLat - dLat,
-    lng: gcjLng - dLng
-  };
-}
+const app = getApp();
 
 Page({
   data: {
@@ -169,8 +74,8 @@ Page({
           
           // 检查经纬度信息并设置地图
           if (postData.经度 && postData.纬度) {
-            // 将WGS84转换为GCJ02坐标
-            let [gcjLng, gcjLat] = wgs84togcj02(postData.经度, postData.纬度);
+            // 数据库中是WGS84，转换为GCJ02用于地图显示
+            let [gcjLng, gcjLat] = app.coordTransform.toGCJ02(postData.经度, postData.纬度);
             
             // 根据状态设置不同的图标
             let iconPath;
@@ -199,7 +104,10 @@ Page({
                   borderRadius: 5,
                   display: 'ALWAYS'
                 }
-              }]
+              }],
+              // 保存原始WGS84坐标用于显示和存储
+              wgslatitude: postData.纬度,
+              wgslongitude: postData.经度
             });
           }
           
@@ -234,13 +142,19 @@ Page({
 
   // 在onMapTap事件中更新标记位置并移动地图
   onMapTap(e) {
-    const { latitude, longitude } = e.detail;
-    let wgsCoords = gcj02towgs84(longitude, latitude);
+    const { latitude, longitude } = e.detail;  // 从地图获取的是GCJ02
+    let wgsCoords = app.coordTransform.toWGS84(longitude, latitude);
+    
     this.setData({
-      'markers[0].latitude': latitude,
-      'markers[0].longitude': longitude,
-      wgslatitude: wgsCoords.lat.toFixed(6),
-      wgslongitude: wgsCoords.lng.toFixed(6)
+      // 地图和标记使用GCJ02
+      'markers[0].latitude': parseFloat(latitude.toFixed(6)),
+      'markers[0].longitude': parseFloat(longitude.toFixed(6)),
+      latitude: parseFloat(latitude.toFixed(6)),
+      longitude: parseFloat(longitude.toFixed(6)),
+      
+      // 界面显示和存储使用WGS84
+      wgslatitude: wgsCoords.lat,  // 已经在转换工具中处理过小数位
+      wgslongitude: wgsCoords.lng
     });
   },
 
@@ -586,9 +500,9 @@ Page({
 
   // 复制经纬度的函数
   copyLL: function() {
-    const { longitude, latitude } = this.data;
+    const { wgslongitude, wgslatitude } = this.data;
     wx.setClipboardData({
-      data: `${longitude}, ${latitude}`,
+      data: `${wgslongitude}, ${wgslatitude}`,
       success: function() {
         wx.showToast({
           title: '经纬度已复制!',
