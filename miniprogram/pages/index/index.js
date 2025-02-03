@@ -7,10 +7,13 @@ Page({
     inputTop: 0,
     arrowTop: 0,
     dropScreenH: 0,
-    timed: false,  // 默认为 false，表示降序
+    timed: false,
     tabIndex: 0,
     currentStatus: 0,
     productList: [],
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],
+    pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],
+    selectedType: '',  // 筛选使用的类型值
     option: {
       page: 1,
       limit: 2000,
@@ -21,14 +24,6 @@ Page({
     isRefreshing: false,
     currentTab: 'post',  // 默认选中“我的发帖”
     showActionSheet: false,
-    /**
-     * actionSheetItems represents a list of action sheet options where each item contains
-     * a text label and a color. The items are:
-     * 1. "我的发现" - My Discoveries
-     * 2. "我的回复" - My Replies
-     * 3. "我的关注" - My Follows
-     * 4. "我的待办" - My To-Do
-     */
     actionSheetItems: [{
       text: "我的发现",
       color: "#333"
@@ -43,6 +38,22 @@ Page({
       color: "#333"
     }],
     selectedType: '' // 新增选中分类
+  },
+
+  typePickerChange(e) {
+    console.log('选择的type索引:', e.detail.value);
+    const selectedType = this.data.pickerList[e.detail.value];
+    console.log('选择的type值:', selectedType);
+    
+    this.setData({
+      selectedType: selectedType === '全部' ? '' : selectedType,
+      'option.page': 1,
+      'option.loadend': false,
+      productList: []
+    }, () => {
+      console.log('更新后的selectedType:', this.data.selectedType);
+      this.loadLikeProductList(true);
+    });
   },
 
   onLoad: function (option) {
@@ -125,9 +136,9 @@ Page({
     } else if (index == 1) {
       // 按分类筛选
       wx.showActionSheet({
-        itemList: ['全部', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆'],
+        itemList: ['全部', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆','VIP整治'],
         success: (res) => {
-          const types = ['', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆']
+          const types = ['', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆','VIP整治']
           this.setData({
             selectedType: types[res.tapIndex],
             'option.page': 1,
@@ -147,7 +158,7 @@ Page({
       limit,
       loadend
     } = this.data.option    
-   
+  
     if (loadend) return Promise.resolve();
     
     if (page === 1 && !forceRefresh) {
@@ -162,87 +173,58 @@ Page({
       }
     }
     
-    let {
-      searchKey,
-      product_type_name
-    } = this.data
-    
     wx.showLoading({
       title: forceRefresh ? '刷新中...' : '加载中...',
       mask: true
-    })
+    });
+  
+    const db = wx.cloud.database();
+    let query = {};
     
-    let status = '';
+    // 添加状态筛选
     if (this.data.currentStatus === 1) {
-      status = '待处理';
+      query.当前状态 = db.command.in(['待回复', '建设中', '规划中', '暂挂中', '待处理']);
     } else if (this.data.currentStatus === 2) {
-      status = '已处理';
+      query.当前状态 = '已解决';
     }
     
-    let option = {
-      page: page,
-      limit: limit,
-      searchKey: searchKey || '',
-      status: status,
-      index: this.data.tabIndex,
-      postTime: this.data.timed ? 'asc' : 'desc',
-      comment: 'desc',
-      watch: 'desc',
-      type: this.data.selectedType || ''
+    // 添加type筛选
+    if (this.data.selectedType) {
+      query.type = this.data.selectedType;
     }
-
+  
+    // 添加搜索关键词
+    if (this.data.searchKey) {
+      query.product_name = db.RegExp({
+        regexp: this.data.searchKey,
+        options: 'i'
+      });
+    }
+  
+    // 如果不是管理员，只显示自己的帖子
     const userInfo = getApp().globalData.userInfo;
     if (!userInfo.isAdmin) {
-      option.author = userInfo.username;
-      console.log('首页 - 普通用户查询，用户名：', userInfo.username);
-    } else {
-      console.log('首页 - 管理员用户查询');
+      query.author = userInfo.username;
     }
-    
-    console.log('首页 - 查询条件：', option);
-   
-    let condition = {
-      date: new Date()   
-    }
-
-    this.setData({
-      "option.loading": true
-    })
-
-    const timeoutPromise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject(new Error('请求超时'));
-      }, 30000);
-    });
-
-    return Promise.race([
-      app.$api[userInfo.isAdmin ? 'getPostList' : 'getMyPostList'](Object.assign(option, condition)),
-      timeoutPromise
-    ]).then(res => {
-      wx.hideLoading()
-      if (res.code) {
+  
+    console.log('查询条件:', query);
+  
+    return db.collection('post')
+      .where(query)
+      .orderBy('product_time', this.data.timed ? 'asc' : 'desc')
+      .orderBy('comment', 'desc')
+      .orderBy('watch', 'desc')
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .get()
+      .then(res => {
+        wx.hideLoading();
         let proList = res.data || [];
         
-        if (this.data.currentStatus !== 0) {
-          const pendingStatus = new Set(['待回复', '建设中', '规划中', '暂挂中', '待处理']);
-          const completedStatus = new Set(['已解决']);
-          
-          proList = proList.filter(item => {
-            let itemStatus = item.当前状态 || '待处理';
-            
-            if (this.data.currentStatus === 1) {
-              return pendingStatus.has(itemStatus);
-            } else {
-              return completedStatus.has(itemStatus);
-            }
-          });
-          console.log('过滤后的帖子列表:', proList);
-        }
-
         const newList = this.data.productList.length > 0 
           ? this.data.productList.concat(proList)
           : proList;
-
+  
         const batchSize = 1000;
         const updateData = () => {
           const currentLength = this.data.productList.length;
@@ -262,40 +244,33 @@ Page({
               this.setData({
                 "option.loadend": true,
                 "option.loading": false
-              })
+              });
             } else {
               this.setData({
                 "option.page": ++page,
                 "option.loading": false
               }, () => {
                 if (proList.length === limit) {
-                  this.loadLikeProductList(forceRefresh)
+                  this.loadLikeProductList(forceRefresh);
                 }
-              })
+              });
             }
           }
         };
         
         updateData();
-      } else {
+      })
+      .catch(err => {
+        console.error('查询失败:', err);
+        wx.hideLoading();
         wx.showToast({
-          title: forceRefresh ? '刷新失败' : '加载失败',
+          title: err.message || (forceRefresh ? '刷新失败' : '加载失败'),
           icon: 'error'
-        })
+        });
         this.setData({
           "option.loading": false
-        })
-      }
-    }).catch(err => {
-      wx.hideLoading()
-      wx.showToast({
-        title: err.message || (forceRefresh ? '刷新失败' : '加载失败'),
-        icon: 'error'
-      })
-      this.setData({
-        "option.loading": false
-      })
-    })
+        });
+      });
   },
 
   checkCache() {

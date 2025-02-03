@@ -2,7 +2,7 @@ const app = getApp();
 
 Page({
   data: {
-    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆'],
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],
     classifyIndex: 0,
     zhuangtaiList:  ['待回复','规划中','建设中','暂挂中','已解决'], 
     ztlistpost: '',

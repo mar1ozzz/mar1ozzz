@@ -10,12 +10,16 @@
       <view class="status-item {{currentStatus==2?'status-active':''}}" bindtap="handleStatusChange" data-index="2">
         <view class="status-text">已处理</view>
       </view>
-      <view class="status-item sort-item" bindtap="screen" data-index="0">
-        <view class="status-text">
-          时间
-          <tui-icon name="{{!timed?'arrowup':'arrowdown'}}" size="14" color="#666"></tui-icon>
-        </view>
-      </view>
+
+      <view class="status-item sort-item">
+  <picker mode="selector" range="{{pickerList}}" bindchange="typePickerChange">
+    <view class="status-text">
+      {{selectedType || '全部'}}
+      <tui-icon name="arrowdown" size="14" color="#666"></tui-icon>
+    </view>
+  </picker>
+</view>
+
     </view>
   </view>
 

@@ -1,7 +1,7 @@
 let app = getApp()
 Page({
   data: {
-    classifyList: ['优化','光缆','传输','资管','综维'],
+    classifyList: ['优化','光缆','VIP整治','传输','资管','综维'],
     classifyIndex: 0,
     product_img_list: [],
     pageType: 'add',
