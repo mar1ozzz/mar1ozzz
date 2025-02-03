@@ -17,7 +17,8 @@ Page({
       pendingCount: 0,
       solvedCount: 0,
       rate: '0%'
-    }
+    },
+    postIndex: {} // 用于存储每个数字对应的帖子ID列表
   },
 
   onLoad: function () {
@@ -77,6 +78,7 @@ Page({
         solvedCount: 0,
         rate: '0%'
       };
+      const postIndex = this.data.postIndex || {}; // 获取现有的 postIndex
 
       // 为每个用户统计待办数量
       for (const user of users) {
@@ -89,10 +91,9 @@ Page({
         
         try {
           // 统计该用户的待办数量
-          const userPosts = posts.filter(post => {
+          const userPendingPosts = posts.filter(post => {
             if (!post.commentList || !post.commentList.length) return false;
 
-            // 找到最后一个@该用户的评论
             const lastMention = [...post.commentList]
               .reverse()
               .find(comment => 
@@ -100,16 +101,12 @@ Page({
                 comment.content.includes(userTag)
               );
 
-            // 如果最后一个@是这个用户，且帖子未解决，则计入待办
             return lastMention !== undefined && post['当前状态'] !== '已解决';
           });
 
-          // 分别计算待办和已解决的数量
-          const pendingCount = userPosts.length;
-          const solvedPosts = posts.filter(post => {
+          const userSolvedPosts = posts.filter(post => {
             if (!post.commentList || !post.commentList.length || post['当前状态'] !== '已解决') return false;
 
-            // 找到最后一个@该用户的评论
             const lastMention = [...post.commentList]
               .reverse()
               .find(comment => 
@@ -119,7 +116,13 @@ Page({
 
             return lastMention !== undefined;
           });
-          const solvedCount = solvedPosts.length;
+
+          const pendingCount = userPendingPosts.length;
+          const solvedCount = userSolvedPosts.length;
+
+          // 存储用户的待办和已解决帖子ID
+          postIndex[`person_${user.username}_pending`] = userPendingPosts.map(p => p._id);
+          postIndex[`person_${user.username}_solved`] = userSolvedPosts.map(p => p._id);
 
           const stats = {
             username: user.username,
@@ -141,6 +144,16 @@ Page({
         }
       }
 
+      // 存储总计的待办和已解决帖子ID
+      const allPendingPosts = [];
+      const allSolvedPosts = [];
+      personStats.forEach(stat => {
+        allPendingPosts.push(...(postIndex[`person_${stat.username}_pending`] || []));
+        allSolvedPosts.push(...(postIndex[`person_${stat.username}_solved`] || []));
+      });
+      postIndex['person_total_pending'] = allPendingPosts;
+      postIndex['person_total_solved'] = allSolvedPosts;
+
       // 计算总处理率
       const totalCount = personTotal.pendingCount + personTotal.solvedCount;
       personTotal.rate = totalCount > 0 ? 
@@ -153,7 +166,8 @@ Page({
 
       this.setData({
         personStats,
-        personTotal
+        personTotal,
+        postIndex
       });
 
     } catch (error) {
@@ -191,19 +205,44 @@ Page({
     }
   },
 
-  // 修改 getPostData 方法，使其返回 Promise
+  // 修改点击处理函数
+  handleCellTap(e) {
+    const { type, author } = e.currentTarget.dataset;
+    const key = `${author}_${type}`;
+    console.log('点击单元格:', { type, author, key }); // 添加调试日志
+    
+    const posts = this.data.postIndex[key] || [];
+    console.log('找到的帖子数量:', posts.length); // 添加调试日志
+    
+    if (posts.length === 0) {
+      wx.showToast({
+        title: '没有相关帖子',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 将帖子ID列表存入缓存
+    wx.setStorageSync('filtered_posts', posts);
+    console.log('已存储帖子ID列表到缓存'); // 添加调试日志
+    
+    // 使用 switchTab 代替 navigateTo
+    wx.switchTab({
+      url: '/pages/index/index'
+    });
+  },
+
+  // 修改 getPostData 方法
   getPostData: function() {
     return new Promise((resolve, reject) => {
       const db = wx.cloud.database();
       const _ = db.command;
 
-      // 先获取所有用户
       db.collection('user').where({
-        isGrant: 'true'  // 只统计已审核的用户
+        isGrant: 'true'
       }).get().then(userRes => {
         const users = userRes.data;
         
-        // 获取所有帖子
         const MAX_LIMIT = 20;
         db.collection('post').count().then(res => {
           const totalCount = res.total;
@@ -221,55 +260,63 @@ Page({
               posts.push(...item.data);
             });
       
-            // 部门统计
             const authorList = [...new Set(posts.map(item => item.author_belong))];
             const tableData = [];
             const total = {
-              A: 0,
-              B: 0,
-              C: 0,
-              D: 0,
-              E: 0,
+              A: 0, B: 0, C: 0, D: 0, E: 0,
               total: 0,
               rate: '0%'
             };
+            
+            // 初始化帖子索引
+            const postIndex = {};
       
             authorList.forEach(author => {
               const counts = {
                 author: author,
-                A: 0,
-                B: 0,
-                C: 0,
-                D: 0,
-                E: 0,
+                A: 0, B: 0, C: 0, D: 0, E: 0,
                 total: 0,
                 rate: '0%'
               };
-      
+
+              // 为每个部门的每种状态创建帖子ID列表
+              postIndex[`${author}_total`] = []; // 添加部门总计的帖子列表
+              postIndex[`${author}_A`] = [];
+              postIndex[`${author}_B`] = [];
+              postIndex[`${author}_C`] = [];
+              postIndex[`${author}_D`] = [];
+              postIndex[`${author}_E`] = [];
+              
               posts.forEach(item => {
                 if (item.author_belong === author) {
+                  // 添加到部门总计列表
+                  postIndex[`${author}_total`].push(item._id);
+                  
                   switch (item['当前状态']) {
                     case '待回复':
                       counts.A++;
                       total.A++;
+                      postIndex[`${author}_A`].push(item._id);
                       break;
                     case '规划中':
                       counts.B++;
                       total.B++;
+                      postIndex[`${author}_B`].push(item._id);
                       break;
                     case '建设中':
                       counts.C++;
                       total.C++;
+                      postIndex[`${author}_C`].push(item._id);
                       break;
                     case '暂挂中':
                       counts.D++;
                       total.D++;
+                      postIndex[`${author}_D`].push(item._id);
                       break;
                     case '已解决':
                       counts.E++;
                       total.E++;
-                      break;
-                    default:
+                      postIndex[`${author}_E`].push(item._id);
                       break;
                   }
                 }
@@ -283,14 +330,232 @@ Page({
             total.total = total.A + total.B + total.C + total.D + total.E;
             total.rate = total.total > 0 ? Math.round((total.E / total.total) * 100) + '%' : '0%';
 
+            // 存储总计的帖子索引
+            postIndex['total_total'] = posts.map(p => p._id);
+            postIndex['total_A'] = posts.filter(p => p['当前状态'] === '待回复').map(p => p._id);
+            postIndex['total_B'] = posts.filter(p => p['当前状态'] === '规划中').map(p => p._id);
+            postIndex['total_C'] = posts.filter(p => p['当前状态'] === '建设中').map(p => p._id);
+            postIndex['total_D'] = posts.filter(p => p['当前状态'] === '暂挂中').map(p => p._id);
+            postIndex['total_E'] = posts.filter(p => p['当前状态'] === '已解决').map(p => p._id);
+
             this.setData({
               tableData,
-              total
+              total,
+              postIndex
             });
-            resolve(); // 完成后 resolve
+            resolve();
           }).catch(reject);
         }).catch(reject);
       }).catch(reject);
     });
+  },
+
+  // 将原来的 onLongPress 改为 saveToImage
+  async saveToImage() {
+    try {
+      const query = wx.createSelectorQuery()
+      query.selectAll('.table-container').boundingClientRect()
+      query.exec(async (res) => {
+        if (!res[0] || res[0].length < 2) {
+          wx.showToast({
+            title: '获取表格失败',
+            icon: 'none'
+          })
+          return
+        }
+
+        // 计算实际需要的画布高度
+        const totalRows = this.data.tableData.length + this.data.personStats.length + 4 // +4是两个表头和两个总计行
+        const cellHeight = 55 // 进一步减小单元格高度
+        const tableSpacing = 100 // 两个表格之间的间距
+        const canvasHeight = (totalRows * cellHeight) + tableSpacing + 80 // 80px作为上下边距
+        
+        // 创建离屏canvas，使用更合适的尺寸
+        const canvas = wx.createOffscreenCanvas({
+          type: '2d',
+          width: 900,  // 增加宽度，确保文字不溢出
+          height: canvasHeight
+        })
+        const ctx = canvas.getContext('2d')
+        
+        // 设置背景色
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        
+        // 设置文字样式
+        ctx.fillStyle = '#000000'
+        ctx.font = '24px sans-serif' // 稍微调小字体
+        ctx.strokeStyle = '#cccccc'
+        ctx.lineWidth = 1
+        
+        // 绘制第一个表格
+        const firstTableHeight = await this.drawTable(ctx, 40, this.data.tableData, this.data.total, [
+          '部门/区县', '总计', '待回复', '规划中', '建设中', '暂挂中', '已解决', '解决率'
+        ], false, 850) // 增加表格宽度
+        
+        // 绘制第二个表格
+        await this.drawTable(ctx, firstTableHeight + tableSpacing, this.data.personStats, this.data.personTotal, [
+          '处理人', '待处理数量', '已处理数量', '处理率'
+        ], true, 850)
+        
+        // 将canvas转为图片
+        const tempFilePath = await new Promise((resolve, reject) => {
+          wx.canvasToTempFilePath({
+            canvas,
+            width: canvas.width,
+            height: canvas.height,
+            destWidth: canvas.width,
+            destHeight: canvas.height,
+            fileType: 'png',
+            success: res => resolve(res.tempFilePath),
+            fail: reject
+          })
+        })
+        
+        // 保存图片到相册
+        wx.saveImageToPhotosAlbum({
+          filePath: tempFilePath,
+          success: () => {
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success'
+            })
+          },
+          fail: (err) => {
+            console.error('保存失败:', err)
+            wx.showToast({
+              title: '保存失败',
+              icon: 'none'
+            })
+          }
+        })
+      })
+    } catch (err) {
+      console.error('保存图片错误:', err)
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none'
+      })
+    }
+  },
+
+  // 修改绘制表格的方法
+  async drawTable(ctx, startY, data, totalRow, headers, isPersonTable, tableWidth) {
+    // 设置表格样式
+    ctx.strokeStyle = '#cccccc'
+    ctx.lineWidth = 1
+    ctx.textAlign = 'center'
+    
+    // 计算列宽
+    const colWidths = []
+    if (isPersonTable) {
+      // 个人统计表的列宽分配
+      colWidths.push(tableWidth * 0.3) // 处理人
+      colWidths.push(tableWidth * 0.25) // 待处理数量
+      colWidths.push(tableWidth * 0.25) // 已处理数量
+      colWidths.push(tableWidth * 0.2) // 处理率
+    } else {
+      // 部门统计表的列宽分配
+      colWidths.push(tableWidth * 0.25) // 部门/区县
+      colWidths.push(tableWidth * 0.1) // 总计
+      colWidths.push(tableWidth * 0.1) // 待回复
+      colWidths.push(tableWidth * 0.1) // 规划中
+      colWidths.push(tableWidth * 0.1) // 建设中
+      colWidths.push(tableWidth * 0.1) // 暂挂中
+      colWidths.push(tableWidth * 0.1) // 已解决
+      colWidths.push(tableWidth * 0.15) // 解决率
+    }
+    
+    const cellHeight = 55 // 进一步减小单元格高度
+    let currentY = startY
+    
+    // 绘制表头
+    ctx.fillStyle = '#f8f8f8'
+    ctx.fillRect(25, currentY, tableWidth, cellHeight)
+    ctx.strokeRect(25, currentY, tableWidth, cellHeight)
+    
+    // 绘制表头文字
+    ctx.fillStyle = '#000000'
+    let currentX = 25
+    headers.forEach((header, index) => {
+      const x = currentX + colWidths[index]/2
+      ctx.fillText(header, x, currentY + (cellHeight/2) + 8)
+      currentX += colWidths[index]
+      ctx.beginPath()
+      ctx.moveTo(currentX, currentY)
+      ctx.lineTo(currentX, currentY + cellHeight)
+      ctx.stroke()
+    })
+    
+    currentY += cellHeight
+    
+    // 绘制数据行
+    data.forEach((row) => {
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(25, currentY, tableWidth, cellHeight)
+      ctx.strokeRect(25, currentY, tableWidth, cellHeight)
+      
+      currentX = 25
+      if (isPersonTable) {
+        const values = [row.username, row.pendingCount, row.solvedCount, row.rate]
+        values.forEach((value, index) => {
+          const x = currentX + colWidths[index]/2
+          ctx.fillStyle = index === 1 && value > 0 ? '#ff0000' : '#000000'
+          ctx.fillText(value.toString(), x, currentY + (cellHeight/2) + 8)
+          currentX += colWidths[index]
+          ctx.beginPath()
+          ctx.moveTo(currentX, currentY)
+          ctx.lineTo(currentX, currentY + cellHeight)
+          ctx.stroke()
+        })
+      } else {
+        const values = [row.author, row.total, row.A, row.B, row.C, row.D, row.E, row.rate]
+        values.forEach((value, index) => {
+          const x = currentX + colWidths[index]/2
+          ctx.fillStyle = (index >= 2 && index <= 6 && value > 0) ? '#ff0000' : '#000000'
+          ctx.fillText(value.toString(), x, currentY + (cellHeight/2) + 8)
+          currentX += colWidths[index]
+          ctx.beginPath()
+          ctx.moveTo(currentX, currentY)
+          ctx.lineTo(currentX, currentY + cellHeight)
+          ctx.stroke()
+        })
+      }
+      currentY += cellHeight
+    })
+    
+    // 绘制总计行
+    ctx.fillStyle = '#f8f8f8'
+    ctx.fillRect(25, currentY, tableWidth, cellHeight)
+    ctx.strokeRect(25, currentY, tableWidth, cellHeight)
+    
+    currentX = 25
+    if (isPersonTable) {
+      const values = ['总计', totalRow.pendingCount, totalRow.solvedCount, totalRow.rate]
+      values.forEach((value, index) => {
+        const x = currentX + colWidths[index]/2
+        ctx.fillStyle = index === 1 && value > 0 ? '#ff0000' : '#000000'
+        ctx.fillText(value.toString(), x, currentY + (cellHeight/2) + 8)
+        currentX += colWidths[index]
+        ctx.beginPath()
+        ctx.moveTo(currentX, currentY)
+        ctx.lineTo(currentX, currentY + cellHeight)
+        ctx.stroke()
+      })
+    } else {
+      const values = ['总计', totalRow.total, totalRow.A, totalRow.B, totalRow.C, totalRow.D, totalRow.E, totalRow.rate]
+      values.forEach((value, index) => {
+        const x = currentX + colWidths[index]/2
+        ctx.fillStyle = (index >= 2 && index <= 6 && value > 0) ? '#ff0000' : '#000000'
+        ctx.fillText(value.toString(), x, currentY + (cellHeight/2) + 8)
+        currentX += colWidths[index]
+        ctx.beginPath()
+        ctx.moveTo(currentX, currentY)
+        ctx.lineTo(currentX, currentY + cellHeight)
+        ctx.stroke()
+      })
+    }
+    
+    return currentY + cellHeight
   }
 });

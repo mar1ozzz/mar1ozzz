@@ -21,6 +21,14 @@ Page({
     isRefreshing: false,
     currentTab: 'post',  // 默认选中“我的发帖”
     showActionSheet: false,
+    /**
+     * actionSheetItems represents a list of action sheet options where each item contains
+     * a text label and a color. The items are:
+     * 1. "我的发现" - My Discoveries
+     * 2. "我的回复" - My Replies
+     * 3. "我的关注" - My Follows
+     * 4. "我的待办" - My To-Do
+     */
     actionSheetItems: [{
       text: "我的发现",
       color: "#333"
@@ -33,7 +41,8 @@ Page({
     }, {
       text: "我的待办",
       color: "#333"
-    }]
+    }],
+    selectedType: '' // 新增选中分类
   },
 
   onLoad: function (option) {
@@ -57,39 +66,36 @@ Page({
   },
 
   onShow() {
-    // 每次显示页面时，都强制刷新数据
     this.setData({
       'option.page': 1,
       'option.loadend': false,
       productList: []
     })
-    this.loadLikeProductList(true) // 强制刷新
+    this.loadLikeProductList(true)
   },
 
   onHide() {
-    // 页面隐藏时清除缓存
     wx.removeStorage({
       key: 'productListCache'
     })
   },
 
   onUnload() {
-    // 页面卸载时清除缓存
     wx.removeStorage({
       key: 'productListCache'
     })
   },
 
   handleStatusChange(e) {
-    const status = parseInt(e.currentTarget.dataset.index); // 使用 data-index
-    console.log('当前状态:', status); // 调试日志
+    const status = parseInt(e.currentTarget.dataset.index);
+    console.log('当前状态:', status);
     this.setData({
       currentStatus: status,
       'option.page': 1,
       'option.loadend': false,
       productList: []
     });
-    this.loadLikeProductList(true); // 强制刷新
+    this.loadLikeProductList(true);
   },
 
   screen(e) {
@@ -101,7 +107,7 @@ Page({
         'option.loadend': false,
         productList: []
       }, () => {
-        this.loadLikeProductList(true) // 强制刷新
+        this.loadLikeProductList(true)
       })
       return 
     }
@@ -114,7 +120,23 @@ Page({
         'option.loadend': false,
         productList: []
       }, () => {
-        this.loadLikeProductList(true) // 强制刷新
+        this.loadLikeProductList(true)
+      })
+    } else if (index == 1) {
+      // 按分类筛选
+      wx.showActionSheet({
+        itemList: ['全部', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆'],
+        success: (res) => {
+          const types = ['', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆']
+          this.setData({
+            selectedType: types[res.tapIndex],
+            'option.page': 1,
+            'option.loadend': false,
+            productList: []
+          }, () => {
+            this.loadLikeProductList(true)
+          })
+        }
       })
     }
   },
@@ -165,10 +187,10 @@ Page({
       index: this.data.tabIndex,
       postTime: this.data.timed ? 'asc' : 'desc',
       comment: 'desc',
-      watch: 'desc'
+      watch: 'desc',
+      type: this.data.selectedType || ''
     }
 
-    // 如果不是管理员，只显示自己的帖子
     const userInfo = getApp().globalData.userInfo;
     if (!userInfo.isAdmin) {
       option.author = userInfo.username;
@@ -206,15 +228,15 @@ Page({
           const completedStatus = new Set(['已解决']);
           
           proList = proList.filter(item => {
-            let itemStatus = item.当前状态 || '待处理'; // 确保使用“当前状态”字段
+            let itemStatus = item.当前状态 || '待处理';
             
             if (this.data.currentStatus === 1) {
-              return pendingStatus.has(itemStatus); // 显示待处理
+              return pendingStatus.has(itemStatus);
             } else {
-              return completedStatus.has(itemStatus); // 显示已处理
+              return completedStatus.has(itemStatus);
             }
           });
-          console.log('过滤后的帖子列表:', proList); // 调试日志
+          console.log('过滤后的帖子列表:', proList);
         }
 
         const newList = this.data.productList.length > 0 
@@ -234,7 +256,7 @@ Page({
             });
           } else {
             if (proList.length < limit) {
-              if (page === 1) {  // 移除 !forceRefresh 条件，总是更新缓存
+              if (page === 1) {
                 this.updateCache(newList);
               }
               this.setData({
@@ -379,18 +401,13 @@ Page({
       showActionSheet: false
     });
     
-    // 根据选择的选项跳转到对应页面
     if (index === 0) {
-      // 我的发帖
       app.$comm.navigateTo('/pages/my/my?searchType=1');
     } else if (index === 1) {
-      // 我的回复
       app.$comm.navigateTo('/pages/my/my?searchType=2');
     } else if (index === 2) {
-      // 我的关注
       app.$comm.navigateTo('/pages/my/my?searchType=3');
     } else if (index === 3) {
-      // 我的待办
       wx.navigateTo({
         url: '/pages/my-todolist/my-todolist'
       })

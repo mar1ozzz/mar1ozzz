@@ -57,6 +57,13 @@
     <text>{{enableSatellite ? '普通地图' : '卫星地图'}}</text>
   </view>
 
+  <!-- 添加type类型切换按钮 -->
+  <view class="classify-picker-btn">
+    <picker bindchange="classifyPickerChange" value="{{classifyIndex}}" range="{{pickerList}}">
+      <text>{{classifyIndex === -1 ? '全部' : classifyList[classifyIndex]}}</text>
+    </picker>
+  </view>
+
   <!-- 图例 -->
   <view class="map-legend">
     <view class="legend-item">

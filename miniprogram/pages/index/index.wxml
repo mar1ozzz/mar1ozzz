@@ -23,19 +23,25 @@
     <product-body mode="{{'one'}}" data="{{productList}}" binddetail="detail"></product-body>
   </view>
 
-  <view bindtap='addPost' class="add_icon">
-    <tui-icon name="add" color="red" tui-icon-class="add"></tui-icon>
-  </view>
+  <text bindtap='addPost' class="add_icon">+</text>
 
   <tui-loadmore visible="{{loading}}" index="3" type="red"></tui-loadmore>
   <tui-nomore visible="{{!loadend}}"></tui-nomore>
 
   <view class="bottom-bar">
     <view class="filter-button" bindtap="showActionSheet">
-      <tui-icon name="filter" size="28" color="#666"></tui-icon>
-      <text>关于我的</text>
+      <!-- 使用 ::after 伪元素显示 MY 文字 -->
     </view>
   </view>
 
-  <tui-actionsheet show="{{showActionSheet}}" bind:click="itemClick" bind:cancel="closeActionSheet" item-list="{{actionSheetItems}}" mask-closable="{{true}}" color="#333" size="28"></tui-actionsheet>
+  <tui-actionsheet 
+    show="{{showActionSheet}}" 
+    bind:click="itemClick" 
+    bind:cancel="closeActionSheet" 
+    item-list="{{actionSheetItems}}" 
+    mask-closable="{{true}}" 
+    color="#333" 
+    size="28"
+    radius="24">
+  </tui-actionsheet>
 </view>

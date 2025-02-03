@@ -95,14 +95,16 @@ Page({
       type: ''
     },
     product_img_list: [],
-    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆'],
-    classifyIndex: 0,
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆'],  // 实际的类型列表
+    pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆'],  // picker显示的完整列表
+    classifyIndex: -1,  // 初始值设为 -1，表示"全部"
     searchKeyword: '',
     searchResults: [],
     showSearchResults: false,
     hideTip: false,
     scale: 8,
-    enableSatellite: false
+    enableSatellite: false,
+    showClassifyList: false
   },
 
   onLoad: function(options) {
@@ -117,10 +119,13 @@ Page({
   },
 
   getdata: function() {
+    wx.showLoading({
+      title: '加载中...',
+    });
+  
     const app = getApp();
     const userInfo = app.globalData.userInfo;
     const db = wx.cloud.database();
-    const _ = db.command;
     
     let query = {};
     
@@ -129,63 +134,58 @@ Page({
       query.author = userInfo.username;
     }
     
+    // 如果不是"全部"，添加type筛选条件
+    if (this.data.classifyIndex !== -1) {
+      query.type = this.data.classifyList[this.data.classifyIndex];
+    }
+  
     db.collection('post')
       .where(query)
-      .skip(this.data.markers.length) 
-      .get() 
-      .then(res => { 
-        console.log(res); 
-        const newMarkers = res.data.map((item,index) => {
+      .skip(this.data.markers.length)
+      .limit(20)
+      .get()
+      .then(res => {
+        const newMarkers = res.data.map((item, index) => {
           let iconPath;
           switch (item.当前状态) {
-            case '建设中': iconPath = "../../static/icon/建设中.png";
-              break;
-            case '规划中':iconPath = "../../static/icon/规划中.png";
-              break;
-            case '暂挂中':iconPath = "../../static/icon/暂挂中.png";
-              break;
-            case '待回复':iconPath = "../../static/icon/待回复.png";
-              break;
-            case '已解决':iconPath = "../../static/icon/已解决.png";
-              break;
+            case '建设中': iconPath = "../../static/icon/建设中.png"; break;
+            case '规划中': iconPath = "../../static/icon/规划中.png"; break;
+            case '暂挂中': iconPath = "../../static/icon/暂挂中.png"; break;
+            case '待回复': iconPath = "../../static/icon/待回复.png"; break;
+            case '已解决': iconPath = "../../static/icon/已解决.png"; break;
           }
           let [gcjLng, gcjLat] = app.coordTransform.toGCJ02(item.经度, item.纬度);
           const markerId = this.data.markers.length + index;
-        return {
-          id: markerId, 
-          _id: item._id,
-          longitude: gcjLng, 
-          latitude: gcjLat, 
-          iconPath: iconPath, 
-          title: item.title, 
-          width: 30, 
-          height: 30, 
-          type: item.type,
-          author: item.author,
-          content: item.content,
-          callout: {
-            content:"",
-            borderWidth:0
-        } 
-        };
-      });
-      this.setData({
-        markers: [...this.data.markers, ...newMarkers] 
-      });
-      
-      if (res.data.length > 0) {
-        this.getdata();
-      } else {
-        wx.hideLoading({ 
-          success: (res) => {
-          }
+          return {
+            id: markerId,
+            _id: item._id,
+            longitude: gcjLng,
+            latitude: gcjLat,
+            iconPath: iconPath,
+            title: item.title,
+            width: 30,
+            height: 30,
+            type: item.type,
+            author: item.author,
+            content: item.content,
+            callout: { content: "", borderWidth: 0 }
+          };
         });
-      }
-    })
-    .catch(err => { 
-      console.error('获取数据失败', err); 
-      wx.hideLoading(); 
-    });
+        
+        this.setData({
+          markers: [...this.data.markers, ...newMarkers]
+        });
+        
+        if (res.data.length > 0) {
+          this.getdata();  // 如果还有数据，继续加载
+        } else {
+          wx.hideLoading();
+        }
+      })
+      .catch(err => {
+        console.error('获取数据失败', err);
+        wx.hideLoading();
+      });
   },
 
   detail(e){
@@ -238,9 +238,13 @@ Page({
   },
 
   classifyPickerChange: function(e) {
+    const index = parseInt(e.detail.value);  // e.detail.value 是选项的索引
+    const actualIndex = index === 0 ? -1 : index - 1;  // 如果选择第一项（全部），则设为-1，否则减1得到实际索引
     this.setData({
-      classifyIndex: e.detail.value
+      classifyIndex: actualIndex,
+      markers: [] // 清空现有的标记
     });
+    this.getdata(); // 重新获取数据
   },
 
   chooseImageHandle: function(e) {

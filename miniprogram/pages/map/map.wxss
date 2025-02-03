@@ -354,19 +354,32 @@
   }
 }
 
-/* 地图类型切换按钮样式 */
-.map-type-btn {
+/* 地图类型按钮和分类选择按钮的共同样式 */
+.map-type-btn, .classify-picker-btn {
   position: fixed;
-  top: 160rpx;  /* 位于搜索框和提示栏下方 */
   right: 20rpx;
-  background-color: #fff;
-  padding: 10rpx 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12rpx 24rpx;
   border-radius: 8rpx;
-  font-size: 24rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
   z-index: 100;
+  width: 120rpx;  /* 添加固定宽度 */
+  height: 40rpx;  /* 添加固定高度 */
+  display: flex;  /* 使用 flex 布局使文字居中 */
+  align-items: center;  /* 垂直居中 */
+  justify-content: center;  /* 水平居中 */
 }
 
-.map-type-btn:active {
-  opacity: 0.8;
+.map-type-btn {
+  top: 140rpx;
+}
+
+.classify-picker-btn {
+  top: 220rpx;
+}
+
+.map-type-btn text, .classify-picker-btn text {
+  font-size: 24rpx;
+  color: #333;
+  line-height: 1;  /* 确保文字垂直居中 */
 }

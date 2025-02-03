@@ -90,6 +90,9 @@
         },
         "scope.userFuzzyLocation": {
             "desc": "位置信息将用于提取经纬度"
+        },
+        "scope.writePhotosAlbum": {
+            "desc": "用于保存统计图表"
         }
     },
     "usingComponents": {
