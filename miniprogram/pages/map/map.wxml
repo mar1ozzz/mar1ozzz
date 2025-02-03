@@ -58,11 +58,16 @@
   </view>
 
   <!-- 添加type类型切换按钮 -->
-  <view class="classify-picker-btn">
-    <picker bindchange="classifyPickerChange" value="{{classifyIndex}}" range="{{pickerList}}">
-      <text>{{classifyIndex === -1 ? '全部' : classifyList[classifyIndex]}}</text>
-    </picker>
-  </view>
+<view class="classify-picker-btn">
+<picker 
+  bindchange="classifyPickerChange" 
+  value="{{mapSelectedType}}" 
+  range="{{pickerList}}" 
+  class="type-picker"
+>
+  <text class="picker-text">{{mapSelectedType ? mapSelectedType : '全部类别'}}</text>
+</picker>
+</view>
 
   <!-- 图例 -->
   <view class="map-legend">
@@ -102,8 +107,8 @@
       <scroll-view scroll-y class="form-content">
         <view class="form-row">
           <input class="title-input" name="title" placeholder="请输入标题" value="{{formData.title}}" />
-          <picker bindchange="classifyPickerChange" value="{{classifyIndex}}" range="{{classifyList}}" class="type-picker">
-            <view class="picker-text">{{classifyList[classifyIndex] || '选择类别'}}</view>
+          <picker bindchange="formClassifyPickerChange" value="{{classifyIndex}}" range="{{classifyList}}" class="type-picker">
+            <view class="picker-text">{{formData.type || '选择类别'}}</view>
           </picker>
         </view>
 

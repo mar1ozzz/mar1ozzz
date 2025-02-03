@@ -97,7 +97,13 @@ Page({
     product_img_list: [],
     classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆'],  // 实际的类型列表
     pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆'],  // picker显示的完整列表
-    classifyIndex: -1,  // 初始值设为 -1，表示"全部"
+    mapSelectedType: '',  // 地图筛选使用的类型值
+    formData: {
+      title: '',
+      content: '',
+      type: '',  // 表单选中的类型
+      images: []
+    },
     searchKeyword: '',
     searchResults: [],
     showSearchResults: false,
@@ -135,8 +141,8 @@ Page({
     }
     
     // 如果不是"全部"，添加type筛选条件
-    if (this.data.classifyIndex !== -1) {
-      query.type = this.data.classifyList[this.data.classifyIndex];
+    if (this.data.mapSelectedType) {  // 使用mapSelectedType进行筛选
+      query.type = this.data.mapSelectedType;
     }
   
     db.collection('post')
@@ -237,15 +243,24 @@ Page({
     return false;
   },
 
+  // 地图上方的分类筛选
   classifyPickerChange: function(e) {
-    const index = parseInt(e.detail.value);  // e.detail.value 是选项的索引
-    const actualIndex = index === 0 ? -1 : index - 1;  // 如果选择第一项（全部），则设为-1，否则减1得到实际索引
+    const selectedType = this.data.pickerList[e.detail.value];
     this.setData({
-      classifyIndex: actualIndex,
+      mapSelectedType: selectedType === '全部' ? '' : selectedType,  // 使用mapSelectedType
       markers: [] // 清空现有的标记
     });
     this.getdata(); // 重新获取数据
-  },
+},
+
+  // 表单中的分类选择
+  formClassifyPickerChange: function(e) {
+    const selectedType = this.data.classifyList[e.detail.value];
+    this.setData({
+      'formData.type': selectedType,  // 更新表单数据
+      classifyIndex: e.detail.value   // 更新索引，但不触发地图更新
+    });
+},
 
   chooseImageHandle: function(e) {
     console.log('图片上传完成：', e.detail);
@@ -255,14 +270,21 @@ Page({
   },
 
   formSubmit: function(e) {
-    let { product_img_list, wgslatitude, wgslongitude, classifyList, classifyIndex } = this.data;
+    console.log('formSubmit triggered', e.detail.value);  // 添加调试信息
+    
+    let { product_img_list, wgslatitude, wgslongitude, formData } = this.data;
     
     // 从表单中获取数据
     let option = e.detail.value;
     
-    // 确保类型正确设置
-    option.type = classifyList[classifyIndex];
+    console.log('formData:', formData);  // 添加调试信息
+    console.log('option before:', option);  // 添加调试信息
+    
+    // 使用formData中的type
+    option.type = formData.type;
     option.product_img_list = product_img_list;
+
+    console.log('option after:', option);  // 添加调试信息
 
     // 表单验证
     let valLoginRes = app.$validate.validate(option, [{
@@ -277,6 +299,12 @@ Page({
 
     if (!valLoginRes.isOk) {
       app.$comm.errorToShow(valLoginRes.errmsg);
+      return false;
+    }
+
+    // 验证类型是否已选择
+    if (!option.type) {
+      app.$comm.errorToShow('请选择类型');
       return false;
     }
 
@@ -317,7 +345,7 @@ Page({
       console.error('提交失败：', err);
       app.$comm.errorToShow('提交失败，请重试');
     });
-  },
+},
 
   preventTouchMove: function() {
     // 阻止滑动穿透
