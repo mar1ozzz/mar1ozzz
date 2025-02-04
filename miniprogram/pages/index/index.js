@@ -77,11 +77,19 @@ Page({
   },
 
   onShow() {
+    const filteredPosts = wx.getStorageSync('filtered_posts');
+    
     this.setData({
       'option.page': 1,
       'option.loadend': false,
-      productList: []
-    })
+      productList: [],
+      filteredPostIds: filteredPosts && filteredPosts.length > 0 ? filteredPosts : null
+    });
+    
+    if (filteredPosts && filteredPosts.length > 0) {
+      wx.removeStorageSync('filtered_posts');
+    }
+    
     this.loadLikeProductList(true)
   },
 
@@ -153,12 +161,7 @@ Page({
   },
 
   loadLikeProductList(forceRefresh = false) {
-    let {
-      page,
-      limit,
-      loadend
-    } = this.data.option    
-  
+    let { page, limit, loadend } = this.data.option;
     if (loadend) return Promise.resolve();
     
     if (page === 1 && !forceRefresh) {
@@ -179,34 +182,40 @@ Page({
     });
   
     const db = wx.cloud.database();
+    const _ = db.command;
     let query = {};
     
-    // 添加状态筛选
-    if (this.data.currentStatus === 1) {
-      query.当前状态 = db.command.in(['待回复', '建设中', '规划中', '暂挂中', '待处理']);
-    } else if (this.data.currentStatus === 2) {
-      query.当前状态 = '已解决';
+    // 如果有过滤的帖子ID列表，优先使用
+    if (this.data.filteredPostIds) {
+      query._id = _.in(this.data.filteredPostIds);
+    } else {
+      // 添加状态筛选
+      if (this.data.currentStatus === 1) {
+        query.当前状态 = _.in(['待回复', '建设中', '规划中', '暂挂中', '待处理']);
+      } else if (this.data.currentStatus === 2) {
+        query.当前状态 = '已解决';
+      }
+      
+      // 添加type筛选
+      if (this.data.selectedType) {
+        query.type = this.data.selectedType;
+      }
+    
+      // 添加搜索关键词
+      if (this.data.searchKey) {
+        query.product_name = db.RegExp({
+          regexp: this.data.searchKey,
+          options: 'i'
+        });
+      }
+    
+      // 如果不是管理员，只显示自己的帖子
+      const userInfo = getApp().globalData.userInfo;
+      if (!userInfo.isAdmin) {
+        query.author = userInfo.username;
+      }
     }
     
-    // 添加type筛选
-    if (this.data.selectedType) {
-      query.type = this.data.selectedType;
-    }
-  
-    // 添加搜索关键词
-    if (this.data.searchKey) {
-      query.product_name = db.RegExp({
-        regexp: this.data.searchKey,
-        options: 'i'
-      });
-    }
-  
-    // 如果不是管理员，只显示自己的帖子
-    const userInfo = getApp().globalData.userInfo;
-    if (!userInfo.isAdmin) {
-      query.author = userInfo.username;
-    }
-  
     console.log('查询条件:', query);
   
     return db.collection('post')

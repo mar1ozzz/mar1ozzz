@@ -1,3 +1,17 @@
+<!-- 顶部操作栏 -->
+<view class="action-bar">
+  <picker bindchange="typeFilter" value="{{pickerIndex}}" range="{{pickerList}}">
+    <view class="action-button filter-button">
+      <text class="button-icon">🔍</text>
+      <text>{{selectedType || '全部类别'}}</text>
+    </view>
+  </picker>
+  <view class="action-button save-button" bindtap="saveToImage">
+    <text class="button-icon">📷</text>
+    <text>保存为图片</text>
+  </view>
+</view>
+
 <view class="table-container" bindlongpress="onLongPress">
   <view class="table">
     <view class="table-header">
@@ -83,12 +97,4 @@
       </view>
     </view>
   </view>
-</view>
-
-<!-- 添加保存按钮 -->
-<view class="save-button-container">
-  <button class="save-button" bindtap="saveToImage">
-    <text class="save-icon">📷</text>
-    保存为图片
-  </button>
 </view>

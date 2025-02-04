@@ -14,7 +14,7 @@
       <view class="status-item sort-item">
   <picker mode="selector" range="{{pickerList}}" bindchange="typePickerChange">
     <view class="status-text">
-      {{selectedType || '全部'}}
+      {{selectedType || '全部类别'}}
       <tui-icon name="arrowdown" size="14" color="#666"></tui-icon>
     </view>
   </picker>
