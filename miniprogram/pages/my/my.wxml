@@ -1,0 +1,47 @@
+<view class="container">
+
+  <view class="tui-header-screen">
+    <view class="tui-screen-top">
+      <view class="tui-top-item {{tabIndex==0?'tui-active tui-bold':''}}" data-index="0" bindtap="screen">
+        时间
+        <tui-icon name="{{timed==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==0?'#e41f19':'#444'}}" tui-icon-class="tui-ml">
+        </tui-icon>
+      </view>
+
+      <view class="tui-top-item {{tabIndex==1?'tui-active tui-bold':''}}" bindtap="screen" data-index="1">
+        回复
+        <tui-icon name="{{commented==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==1?'#e41f19':'#444'}}" tui-icon-class="tui-ml">
+        </tui-icon>
+      </view>
+
+      <view class="tui-top-item {{tabIndex==2?'tui-active tui-bold':''}}" bindtap="screen" data-index="2">
+        关注
+        <tui-icon name="{{watched==0?'arrowup':'arrowdown'}}" size="14" color="{{tabIndex==2?'#e41f19':'#444'}}" tui-icon-class="tui-ml">
+        </tui-icon>
+      </view>
+    </view>
+  </view>
+
+
+
+  <view class="product-list">
+    <view wx:if="{{searchType>1}}">
+      <product-body mode="{{'one'}}" data="{{productList}}" binddetail="detail"></product-body>
+    </view>
+    <view wx:else>
+      <product-body mode="{{'one'}}" data="{{productList}}" binddetail="detail">
+      </product-body>
+    </view>
+  </view>
+  <tui-loadmore visible="{{loading}}" index="3" type="red"></tui-loadmore>
+  <tui-nomore visible="{{!loadend}}"></tui-nomore>
+
+  <view class="bottom-bar">
+    <view class="filter-button" bindtap="showActionSheet">
+      <tui-icon name="filter" size="28" color="#666"></tui-icon>
+      <text>关于我的</text>
+    </view>
+  </view>
+
+  <tui-actionsheet show="{{showActionSheet}}" bind:click="itemClick" bind:cancel="closeActionSheet" item-list="{{actionSheetItems}}" mask-closable="{{true}}" color="#333" size="28"></tui-actionsheet>
+</view>

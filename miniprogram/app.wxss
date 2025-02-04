@@ -1,0 +1,6 @@
+@import './static/css/main.wxss';
+@import './static/css/icon.wxss';
+
+page {
+  background: #fafafa;
+}

@@ -1,0 +1,15 @@
+<table scrollViewHeight="calc(100vh - 114rpx)" bindscrolltolower="getList" class="basic-table"
+  columns="{{tableColumns}}" dataList="{{dataList}}" getListLoading="{{isLoad}}"
+  showTipImage="{{dataList.length===0&&!isLoad}}" bindclicklistitem="handleClickItem" rowKey="_id" />
+
+
+<tui-modal show="{{showInfo}}" bind:cancel="hideInfoHandle" custom="{{true}}" padding="0">
+  <view class="tui-modal-custom">
+    <view class="info-content">
+      {{dataInfo.content}}
+    </view>
+    <view class="info-btn" bindtap="hideInfoHandle">
+      确认
+    </view>
+  </view>
+</tui-modal>

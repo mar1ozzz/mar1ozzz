@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "product-body":"../../components/product-body/product-body"
+  }
+}

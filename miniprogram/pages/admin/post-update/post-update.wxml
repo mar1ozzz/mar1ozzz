@@ -1,0 +1,167 @@
+<!---根据pageType状态显示map组件-->
+<view wx:if="{{pageType=='add' || pageType=='show'}}">
+  <view class="map-container" wx:if="{{latitude && longitude}}">
+    <map id="postMap" 
+      style="width: 100%; height: 180px;" 
+      latitude="{{latitude}}" 
+      longitude="{{longitude}}" 
+      markers="{{markers}}"
+      scale="14"
+      show-location>
+    </map>
+
+    <!-- 图例 -->
+    <view class="map-legend">
+      <view class="legend-item">
+        <image src="../../../static/icon/规划中.png" class="legend-icon"></image>
+        <text>规划中</text>
+      </view>
+      <view class="legend-item">
+        <image src="../../../static/icon/建设中.png" class="legend-icon"></image>
+        <text>建设中</text>
+      </view>
+      <view class="legend-item">
+        <image src="../../../static/icon/暂挂中.png" class="legend-icon"></image>
+        <text>暂挂中</text>
+      </view>
+      <view class="legend-item">
+        <image src="../../../static/icon/待回复.png" class="legend-icon"></image>
+        <text>待回复</text>
+      </view>
+      <view class="legend-item">
+        <image src="../../../static/icon/已解决.png" class="legend-icon"></image>
+        <text>已解决</text>
+      </view>
+    </view>
+  </view>
+  <view class="location-view">
+    <text class="location-text">经度：{{longitude}}</text>
+    <text class="location-text">纬度：{{latitude}}</text>
+  </view>
+</view>
+
+<view class="container">
+  <form bindsubmit="formSubmit">
+    <tui-list-cell>
+      <view class="tui-line-cell">
+        <view class="title-row">
+          <!-- 标题输入 -->
+          <view class="title-input-wrapper">
+            <view class="tui-title">标题</view>
+            <input placeholder-class="phcolor" value="{{title}}" class="tui-input" name="title" disabled="{{pageType=='show'}}" placeholder="请输入标题" type="text" />
+          </view>
+          
+          <!-- 复制经纬度 -->
+          <view class="copy-ll-wrapper" style="display: flex;align-items: center;">
+            <view class="tui-title" style="font-size: 18px;"></view>
+            <button class="copy-ll-btn" style="font-size: 11px;" bindtap="copyLL">复制经纬度</button>
+          </view>
+        </view>
+      </view>
+    </tui-list-cell>
+
+    <block wx:if="{{pageType!='add'}}">
+      <tui-list-cell>
+        <view class="tui-line-cell">
+          <view class="tui-title">状态</view>
+          <picker class="tui-input tui-picker" bindchange="zhuangtaiPickerChange" value="{{zhuangtaiIndex}}" range="{{zhuangtaiList}}">
+            <input class="set-right-text" value="{{ztlistpost}}" disabled name="type" />
+          </picker>
+        </view>
+        <button class="my-custom-button" bindtap="xiugaizhuangtai">确认修改</button>
+      </tui-list-cell>
+    </block>
+
+    <tui-list-cell>
+      <view class="tui-line-cell">
+        <view class="tui-title">详情</view>
+        <view class="uni-textarea">
+          <textarea bindconfirm="confirmTextArea" placeholder="详细信息....." maxlength="-1" auto-height="true" class="textarea-ui" value="{{content}}" name="content" show-confirm-bar="{{true}}" placeholder-class="placeholderText" bindinput="bindTextarea" disabled="{{pageType=='show'}}" />
+        </view>
+      </view>
+    </tui-list-cell>
+
+    <tui-list-cell hover="{{false}}" last="{{true}}">
+      <view class="img-body">
+        <view class="img-header">
+          <view class="img-title">图片</view>
+          <view class="img-num">{{product_img_list.length}}/9</view>
+        </view>
+        <tui-upload value="{{product_img_list||[]}}" forbidAdd="{{pageType=='show'}}" forbidDel="{{pageType=='show'}}" tui-upload-class="image-item" bindcomplete="chooseImageHandle" catalogue="product"></tui-upload>
+        <view class='edit-img'>
+          <view wx:if="{{pageType=='show'}}" wx:for="{{product_img_list}}" wx:key="index" bindtap="ViewImage" data-url="{{product_img_list[index]}}">
+            <image src='{{item}}' mode='aspectFill' />
+          </view>
+        </view>
+      </view>
+    </tui-list-cell>
+
+    <!-- 显示评论列表 -->
+    <view class="comment-list" wx:if="{{pageType=='show'}}">
+      <comment-body mode="{{'one'}}" data="{{commentList}}"></comment-body>
+
+      <!-- 评论输入区域 -->
+      <view class="comment-input-area">
+        <view class="comment-input-wrapper">
+          <textarea class="comment-textarea" placeholder="请输入回复内容..." value="{{commentContent}}" bindinput="onCommentInput" />
+        </view>
+
+        <view class="actions-row">
+          <!-- 转派选项 -->
+          <view class="reassign-section">
+            <text>转派</text>
+            <switch checked="{{isReassign}}" bindchange="toggleReassign" />
+            <text wx:if="{{selectedUser}}" class="selected-user">{{selectedUser.username}}</text>
+          </view>
+
+          <!-- 状态选择 -->
+          <view class="status-section">
+            <text>处理状态：</text>
+            <picker mode="selector" range="{{zhuangtaiList}}" bindchange="onStatusChange" class="status-picker custom-picker">
+              <view class="status-picker">{{currentStatus || '请选择状态'}}</view>
+            </picker>
+          </view>
+        </view>
+
+        <!-- 提交按钮 -->
+        <button class="submit-btn" bindtap="submitComment">提交回复</button>
+      </view>
+    </view>
+
+    <block wx:if="{{pageType!='show'}}">
+      <button class="footer-btn" formType="submit">
+        提交
+      </button>
+    </block>
+    <block wx:else>
+      <button class="footer-btn-comment" bindtap="comment">
+        回复
+      </button>
+      <button class="footer-btn-watch" bindtap="watch">
+        {{watched==false?'关注':'取消关注'}}
+      </button>
+    </block>
+
+  </form>
+</view>
+
+<!-- 用户选择弹出层 -->
+<view class="popup-mask" wx:if="{{showUserSearch}}" bindtap="hideUserSearch">
+  <view class="popup-content" catchtap="stopPropagation">
+    <view class="popup-header">
+      <text class="popup-title">选择转派对象</text>
+      <text class="popup-close" bindtap="hideUserSearch">×</text>
+    </view>
+    
+    <view class="search-box">
+      <input class="search-input" placeholder="搜索用户" bindinput="onSearchInput" />
+    </view>
+    
+    <scroll-view class="user-list" scroll-y>
+      <view wx:for="{{filteredUsers}}" wx:key="_id" class="user-item" bindtap="selectUser" data-user="{{item}}">
+        <text>{{item.username}}</text>
+        <text class="user-belong">{{item.quxian}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

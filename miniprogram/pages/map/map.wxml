@@ -1,0 +1,139 @@
+<view class="container">
+  <!-- 搜索框移到最上面 -->
+  <view class="search-box">
+    <input 
+      class="search-input" 
+      placeholder="搜索位置" 
+      value="{{searchKeyword}}"
+      bindinput="onInput"
+    />
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+
+  <!-- tip-bar放在搜索框下面 -->
+  <view class="tip-bar {{hideTip ? 'hide' : ''}}">
+    <scroll-view scroll-x enable-flex class="tip-scroll" enhanced show-scrollbar="false">
+      <text class="tip-text">请点击地图选择你要反映的问题区域。温馨提示：请准确定位，详细描述问题，便于及时处理。</text>
+    </scroll-view>
+  </view>
+
+  <!-- 搜索结果列表 -->
+  <view class="search-results {{showSearchResults ? 'show' : ''}}" wx:if="{{showSearchResults}}">
+    <view class="results-header">
+      <text>搜索结果</text>
+      <text class="close-results" bindtap="closeSearchResults">×</text>
+    </view>
+    <scroll-view scroll-y class="results-list">
+      <view 
+        class="result-item" 
+        wx:for="{{searchResults}}" 
+        wx:key="index"
+        bindtap="selectLocation"
+        data-latitude="{{item.latitude}}"
+        data-longitude="{{item.longitude}}"
+      >
+        <view class="result-name">{{item.name}}</view>
+        <view class="result-address">{{item.address}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 地图组件 -->
+  <map 
+    id="myMap"
+    longitude="{{longitude}}" 
+    latitude="{{latitude}}" 
+    scale="{{scale}}" 
+    markers="{{markers}}"
+    bindmarkertap="detail"
+    bindtap="onMapTap"
+    show-location 
+    enable-satellite="{{enableSatellite}}"
+    class="map {{showForm ? 'map-half' : ''}}"
+  ></map>
+
+  <!-- 添加地图类型切换按钮 -->
+  <view class="map-type-btn" bindtap="toggleMapType">
+    <text>{{enableSatellite ? '普通地图' : '卫星地图'}}</text>
+  </view>
+
+  <!-- 添加type类型切换按钮 -->
+<view class="classify-picker-btn">
+<picker 
+  bindchange="classifyPickerChange" 
+  value="{{mapSelectedType}}" 
+  range="{{pickerList}}" 
+  class="type-picker"
+>
+  <text class="picker-text">{{mapSelectedType ? mapSelectedType : '全部类别'}}</text>
+</picker>
+</view>
+
+  <!-- 图例 -->
+  <view class="map-legend">
+    <view class="legend-item">
+      <image src="../../static/icon/规划中.png" class="legend-icon"></image>
+      <text>规划中</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/建设中.png" class="legend-icon"></image>
+      <text>建设中</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/暂挂中.png" class="legend-icon"></image>
+      <text>暂挂中</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/待回复.png" class="legend-icon"></image>
+      <text>待回复</text>
+    </view>
+    <view class="legend-item">
+      <image src="../../static/icon/已解决.png" class="legend-icon"></image>
+      <text>已解决</text>
+    </view>
+  </view>
+
+  <!-- 发帖表单 -->
+  <view class="post-form {{showForm ? 'show' : ''}}">
+    <form bindsubmit="formSubmit">
+      <view class="form-header">
+        <view class="header-left">
+          <text class="form-title">问题反馈</text>
+          <text class="location-text">经度：{{wgslongitude}}，纬度：{{wgslatitude}}</text>
+        </view>
+        <view class="close-btn" bindtap="hideForm">×</view>
+      </view>
+
+      <scroll-view scroll-y class="form-content">
+        <view class="form-row">
+          <input class="title-input" name="title" placeholder="请输入标题" value="{{formData.title}}" />
+          <picker bindchange="formClassifyPickerChange" value="{{classifyIndex}}" range="{{classifyList}}" class="type-picker">
+            <view class="picker-text">{{formData.type || '选择类别'}}</view>
+          </picker>
+        </view>
+
+        <textarea 
+          class="content-textarea" 
+          placeholder="请输入详细内容" 
+          name="content"
+          value="{{formData.content}}"
+        />
+
+        <view class="upload-section">
+          <text class="upload-hint">上传图片（最多9张）：</text>
+          <tui-upload 
+            value="{{product_img_list}}"
+            bind:complete="chooseImageHandle"
+            limit="9"
+            class="upload-component"
+          />
+        </view>
+      </scroll-view>
+
+      <view class="button-group">
+        <button class="cancel-btn" bindtap="hideForm">取消</button>
+        <button class="submit-btn" form-type="submit">提交</button>
+      </view>
+    </form>
+  </view>
+</view>

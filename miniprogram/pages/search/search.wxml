@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="tui-searchbox">
+    <view class="tui-search-input">
+      <icon type="search" size='20' color='#333'></icon>
+      <input confirm-type="search" placeholder="搜索" auto-focus="{{true}}"
+        placeholder-class="tui-input-plholder" class="tui-input" value="{{key}}" bindinput="input" />
+      <icon type="clear" size='20' color='#bcbcbc' bindtap="cleanKey" hidden="{{!key}}"></icon>
+    </view>
+    <view class="tui-cancle" bindtap="searchValHandle">搜索</view>
+  </view>
+
+  <view class="tui-search-history" wx:if="{{history.length>0}}">
+    <view class="tui-history-header">
+      <view class="tui-search-title">搜索历史</view>
+      <tui-icon name="delete" size='14' color='#333' bindtap="openActionSheet" class="tui-icon-delete"></tui-icon>
+    </view>
+    <view class="tui-history-content">
+      <block wx:for="{{history}}" wx:key="{{index}}">
+        <tui-tag type="gray" tui-tag-class="tui-tag" shape="circle"  bindtap="tagClickHandle" data-val="{{item}}">{{item}}</tui-tag>
+      </block>
+    </view>
+  </view>
+
+  <view class="tui-search-hot">
+    <view class="tui-hot-header">
+      <view class="tui-search-title">大家正在搜</view>
+    </view>
+    <view class="tui-hot-content">
+      <block wx:for="{{hot}}" wx:key="{{index}}">
+        <tui-tag type="gray" tui-tag-class="tui-tag" shape="circle" bindtap="tagClickHandle" data-val="{{item.hot_search_text}}">{{item.hot_search_text}}</tui-tag>
+      </block>
+    </view>
+  </view>
+  <tui-actionsheet show="{{showActionSheet}}" tips="{{tips}}" bind:click="itemClick" bind:cancel="closeActionSheet">
+  </tui-actionsheet>
+</view>

@@ -1,0 +1,413 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.map {
+  width: 100%;
+  height: calc(100vh - 94rpx);
+  margin-top: 94rpx;
+  transition: all 0.3s ease;
+}
+
+.map-half {
+  height: 50vh;
+}
+
+/* 图例样式 */
+.map-legend {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 12rpx 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 100;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 30rpx;
+  margin-bottom: 0;
+}
+
+.legend-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 8rpx;
+}
+
+.legend-item text {
+  font-size: 24rpx;
+  color: #333333;
+}
+
+/* 发帖表单样式 */
+.post-form {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  background: #fff;
+  border-radius: 20rpx 20rpx 0 0;
+  transition: bottom 0.3s ease;
+  z-index: 1000;
+}
+
+.post-form.show {
+  bottom: 0;
+}
+
+.post-form form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  padding: 16rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.form-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.location-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.close-btn {
+  font-size: 36rpx;
+  color: #999;
+  padding: 8rpx;
+}
+
+.form-content {
+  flex: 1;
+  padding: 16rpx 30rpx;
+  padding-bottom: 120rpx;
+  height: calc(50vh - 180rpx); /* 减去header和button的高度 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.title-input {
+  flex: 1;
+  height: 72rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+}
+
+.type-picker {
+  width: 180rpx;
+  height: 72rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 16rpx;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.content-textarea {
+  width: 100%;
+  height: 100rpx;
+  padding: 16rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+  box-sizing: border-box;
+}
+
+.upload-section {
+  margin-bottom: 16rpx;
+}
+
+.upload-hint {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.button-group {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 16rpx 30rpx;
+  gap: 20rpx;
+  background: #fff;
+  border-top: 1rpx solid #eee;
+  z-index: 1;
+}
+
+.cancel-btn, .submit-btn {
+  width: 180rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  margin: 0;
+  padding: 0;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.submit-btn {
+  background: #07c160;
+  color: #fff;
+}
+
+/* 确保地图占据上半部分 */
+#map {
+  height: 50vh;
+}
+
+.overlay {
+  display: none;
+}
+
+.tip-bar {
+  position: fixed;
+  top: 94rpx;
+  left: 0;
+  right: 0;
+  padding: 0;
+  background-color: rgba(231, 76, 60, 0.6);
+  color: #fff;
+  z-index: 1000;
+  height: 40rpx;
+  transition: all 0.3s ease;
+  opacity: 1;
+}
+
+.tip-scroll {
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+  /* 隐藏滚动条 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* 隐藏 WebKit 浏览器的滚动条 */
+.tip-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tip-text {
+  display: inline-block;
+  font-size: 24rpx;
+  line-height: 40rpx;
+  padding: 0 20rpx;
+  animation: scrollText 15s linear infinite;
+  /* 防止文字模糊 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tip-bar.hide {
+  opacity: 0;
+  transform: translateY(-40rpx);
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* 搜索框样式 */
+.search-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  z-index: 1001;
+  padding: 12rpx 20rpx;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  height: 70rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  background: #fff;
+  border-radius: 4rpx;
+}
+
+.search-btn {
+  margin-left: 20rpx;
+  width: 140rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 28rpx;
+  background: #07c160;
+  color: #fff;
+  border-radius: 4rpx;
+  text-align: center;
+}
+
+/* 搜索结果列表样式 */
+.search-results {
+  position: fixed;
+  top: 94rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  max-height: 600rpx;
+  transform: translateY(-20rpx);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.search-results.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.results-header {
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-results {
+  padding: 10rpx;
+  font-size: 32rpx;
+  color: #999;
+}
+
+.results-list {
+  max-height: 500rpx;
+  padding: 0 20rpx;
+}
+
+.result-item {
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.result-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.result-address {
+  font-size: 24rpx;
+  color: #666;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* 地图类型按钮和分类选择按钮的共同样式 */
+.map-type-btn, .classify-picker-btn {
+  position: fixed;
+  right: 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  width: 140rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.map-type-btn {
+  top: 120rpx;
+}
+
+.classify-picker-btn {
+  top: 200rpx;
+}
+
+.map-type-btn text, .picker-text {
+  font-size: 24rpx;
+  color: #333;
+  text-align: center;
+}
+
+.type-picker {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 表单中的选择器样式 */
+.form-row .type-picker {
+  width: 180rpx;
+  height: 72rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 16rpx;
+}
+
+.form-row .title-input {
+  flex: 1;
+  height: 72rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 30rpx;
+}

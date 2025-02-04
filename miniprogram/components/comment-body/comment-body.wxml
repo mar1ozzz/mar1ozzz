@@ -1,0 +1,39 @@
+
+
+    <view class="pro-one" wx:for="{{data}}">
+      <view class="tui-pro-item"  >
+        <view class="tui-pro-content">
+        
+          <view wx:if="{{item.score}}" class="star-line">             
+              <view class="star-title">评星</view>
+              <view class="star-title">{{item.score}}分</view>
+              
+          </view>
+          <view wx:else class="comment-line">             
+              <view class="star-title">回复({{index+1}})</view>             
+          </view>
+        
+          
+       <!--    <textarea   auto-height="true" class="textarea-ui" value="{{item.content}}"  maxlength="300" disabled="true"/> -->
+          <view class="textarea-ui">
+            {{item.content}}
+          </view>
+      
+          
+          <view class='edit-img' wx:if="{{item.product_img_list.length}}" >
+            <view wx:for="{{item.product_img_list}}" wx:key="index" bindtap="ViewImage" data-url="{{item.product_img_list[index]}}"  wx:for-item="postimage">            
+              <image class="image" src='{{postimage}}' mode='aspectFill' />
+              
+            </view>
+          </view>
+          <view>
+            <view class="tui-line-cell">             
+              <view class="tui-pro-author">回复人：{{item.author}}</view>
+              <view class="tui-pro-author">{{item.product_time}}</view>
+            </view>
+          </view>
+         
+        </view>
+      </view>
+    </view>
+

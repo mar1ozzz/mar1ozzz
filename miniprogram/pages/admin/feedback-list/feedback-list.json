@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "table": "../../../components/table/table",
+    "tui-modal": "../../../components/modal/modal"
+  }
+}

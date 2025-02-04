@@ -1,0 +1,62 @@
+<view class="container">
+ <!--  <view class="table">
+    <view class="caption">今日菜单</view>
+    <view class="tr bg-w">
+      <view class="th">类别</view>
+      <view class="th">名称</view>
+
+    </view>
+    <block wx:for="{{menu_list}}" wx:key="{{_id}}">
+      <view class="tr bg-g">
+        <view class="td">{{item.category}}</view>
+        <view class="td">{{item.name}}</view>
+      </view>
+
+    </block>
+  </view> -->
+  <view class="tui-header-banner">
+    <view class="tui-banner-bg">
+      <view class="tui-banner-box">
+        <swiper indicator-dots="true" autoplay="true" interval="5000" duration="150" class="tui-banner-swiper"
+          circular="{{true}}">
+          <swiper-item wx:for="{{swiperList}}" wx:key="{{index}}" data-info="{{item}}" catchtap="toSwiperDetailHandle">
+            <image src="{{item.swiper_img}}" class="tui-slide-image" mode="scaleToFill" />
+          </swiper-item>
+        </swiper>
+      </view>
+    </view>
+  </view>
+
+  <form bindsubmit="formSubmit">
+  <view class="position">
+    <tui-list-cell  padding="0px 15px">
+      <view class="tui-line-cell">
+        <view class="tui-title">就餐地点</view>
+        <picker class="tui-input tui-picker" bindchange="positionPickerChange" value="{{positionIndex}}" range="{{positionList}}">
+          <input class="set-right-text" value="{{ordered==0?positionList[positionIndex]:preorder.position}}" disabled name="position" />
+        </picker>
+      </view>
+    </tui-list-cell>
+  </view>
+    <view class="btn-box">
+      <button class="button" formType="submit">
+        {{ordered==0?'预定':'撤销'}}
+      </button>
+      <button wx:if="{{ordered==1}}" class="button" bindtap="usePreorder">
+        就餐
+      </button>
+    </view>
+
+    <!--     <block wx:if="{{orderable==1}}">
+      <button class="footer-btn" formType="submit">
+        {{ordered==0?'预定':'撤销'}}
+      </button>
+    </block>
+    <block wx:else>
+      <button wx:if="{{ordered==1}}" class="footer-btn" bindtap="usePreorder">
+        就餐
+      </button>
+    </block> -->
+  </form>
+
+</view>

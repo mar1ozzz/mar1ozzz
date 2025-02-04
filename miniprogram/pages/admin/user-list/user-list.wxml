@@ -1,0 +1,14 @@
+<table scrollViewHeight="calc(80vh)" bindscrolltolower="getList" class="basic-table"
+  columns="{{tableColumns}}" dataList="{{dataList}}" getListLoading="{{isLoad}}"
+  showTipImage="{{dataList.length===0&&!isLoad}}" bindclicklistitem="handleClickItem" rowKey="_id" />
+
+
+<!-- <tui-modal show="{{showModal}}" bindcancel="hideModalHandle" custom="{{true}}" fadein="{{true}}">
+  <view class="tui-modal-custom">
+    <view class="tui-prompt-title">设置余额</view>
+    <input type="digit" placeholder="请输入余额" class="tui-input" value="{{userMoney}}" bindinput="userMoneyInputHandle" />
+    <tui-button shape="circle" type="theme" bindclick="userMoneyClickHandle" size="26" width="40%" height="62rpx">
+      立即提交
+    </tui-button>
+  </view>
+</tui-modal> -->

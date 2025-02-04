@@ -1,0 +1,16 @@
+.tui-modal-custom {
+  text-align: center;
+}
+
+
+.tui-prompt-title {
+  padding-bottom: 20rpx;
+  font-size: 34rpx;
+}
+
+.tui-input {
+  margin: 0rpx 40rpx 30rpx;
+  border-bottom: 1rpx solid #e6e6e6;
+  padding-bottom: 8rpx;
+  height: 60rpx;
+}

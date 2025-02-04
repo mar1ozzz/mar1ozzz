@@ -1,0 +1,149 @@
+<view class="user">
+  <block wx:if="{{isLogin}}">
+
+    <view>
+
+      <view class="tui-header-box" style="height:{{height}}px;background:rgba(255,255,255,{{opcity}})">
+
+        <view class="tui-header" style="padding-top:{{top}}px;opacity:{{opcity}}">
+
+          我的
+
+        </view>
+
+      </view>
+
+      <view class="tui-mybg-box">
+
+        <view class="tui-my-bg"></view>
+
+        <view class="tui-header-center">
+
+          <view class="tui-info">
+
+
+            <view class="tui-nickname">
+
+              <text>{{userInfo.username}}</text>
+
+            </view>
+
+          </view>
+
+        </view>
+
+      </view>
+
+
+      <view class="menu-body">
+
+        <tui-list-view tui-view-class="tui-view">
+
+
+
+          <!-- <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="toDepositHandle">
+
+            <tui-icon name="wealth-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <text class="tui-cell-name">我的钱包</text>
+
+          </tui-list-cell> -->
+
+          <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="toRegist">
+
+            <tui-icon name="about-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">我的信息</view>
+
+          </tui-list-cell>
+
+<!-- 
+
+          <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="toCollectionHandle">
+
+            <tui-icon name="service-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">我的收藏</view>
+
+          </tui-list-cell> -->
+
+         <!--  <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="toAddressHandle">
+
+            <tui-icon name="position-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <text class="tui-cell-name">地址管理</text>
+
+          </tui-list-cell> -->
+
+          <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="tomy" data-info="1">
+
+            <tui-icon name="mail-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">我的发帖</view>
+
+          </tui-list-cell>
+
+
+          <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="tomy" data-info="2">
+
+            <tui-icon name="message-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">我的回复</view>
+
+          </tui-list-cell>
+
+
+          <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="tomy" data-info="3">
+
+            <tui-icon name="alarm-fill" size="24" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">我的关注</view>
+
+          </tui-list-cell>
+
+          <tui-list-cell arrow="{{true}}" tui-cell-class="tui-list" bindclick="logout">
+
+            <tui-icon name="close-fill" size="23" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">退出登录</view>
+
+          </tui-list-cell>
+
+          <tui-list-cell wx:if="{{userInfo.isAdmin==true}}" arrow="{{true}}" tui-cell-class="tui-list" bindclick="toAdminPageHandle">
+
+            <tui-icon name="people-fill" size="23" color="#f06c7a"></tui-icon>
+
+            <view class="tui-cell-name">管理页面</view>
+
+          </tui-list-cell>
+
+
+        </tui-list-view>
+
+      </view>
+
+     <!--  <view class="u-fab">
+
+        <view class="fab-bdoy">
+
+          <button open-type="contact" session-from="weapp" class="kfBtn">
+
+            <tui-icon name="kefu" size="34" color="#ffffff"></tui-icon>
+
+          </button>
+
+        </view>
+
+      </view> -->
+
+    </view>
+
+  </block>
+
+  <block wx:else>
+
+    <button  bindclick="userLogin">aaaaa</button>
+
+  </block>
+
+</view>

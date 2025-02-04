@@ -1,0 +1,40 @@
+<wxs module="helper">
+var getStatusClass = function(status) {
+  return status === '已解决' ? 'status-done' : 'status-pending';
+};
+
+var getStatus = function(item) {
+  return item['当前状态'] || '待回复';
+};
+
+module.exports = {
+  getStatusClass: getStatusClass,
+  getStatus: getStatus
+};
+</wxs>
+<view class="tui-product-list">
+  <view class="tui-product-container">
+    <view class="pro-one" wx:for="{{data}}">
+      <view class="tui-pro-item" hover-class="hover" hover-start-time="150" bindtap="detail" data-info="{{item}}">        
+        <view class="tui-pro-content">
+          <view class="tui-line-cell">  
+            <view class="tui-pro-author">{{item.author_belong}} {{item.author}}</view>
+            <view class="tui-pro-time">{{item.product_time}}</view>
+          </view> 
+          <view class="tui-pro-tit">
+            <text>{{item.title}}</text>
+            <view class="tui-pro-right">
+              <view class="tui-pro-comment">{{item.comment}}条回复</view>
+              <view class="tui-pro-status {{helper.getStatusClass(helper.getStatus(item))}}">{{helper.getStatus(item)}}</view>
+            </view>
+          </view>
+          <view class='edit-img' wx:if="{{item.product_img_list.length}}">
+            <view wx:for="{{item.product_img_list}}" wx:key="index" data-url="{{item.product_img_list[index]}}" wx:for-item="postimage">            
+              <image class="image" src='{{postimage}}' mode='aspectFill' />
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

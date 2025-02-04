@@ -1,0 +1,8 @@
+<view class="menu-list">
+  <block wx:for="{{menuList}}">
+    <view class="menu-tem" bindtap="itemClickHandle" data-url="{{item.url}}">
+      <tui-icon name="{{item.icon}}" size="30" color="#f06c7a"></tui-icon>
+      <text class="menu-item-text">{{item.name}}</text>
+    </view>
+  </block>
+</view>

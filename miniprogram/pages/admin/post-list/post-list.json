@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "table": "../../../components/table/table",
+    "tui-fab":"../../../components/tui-fab/tui-fab"
+  }
+}

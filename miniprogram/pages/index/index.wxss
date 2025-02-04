@@ -1,0 +1,322 @@
+page {
+  background: #f7f7f7;
+}
+
+.container {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tui-header-screen {
+  width: 100%;
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  background: #fff;
+}
+
+.status-bar {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1rpx solid #eee;
+  padding: 0 20rpx;
+  background: #fff;
+}
+
+.status-item {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 1;
+}
+
+.status-text {
+  font-size: 28rpx;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.status-active .status-text {
+  color: #e41f19;
+  font-weight: bold;
+}
+
+.status-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background: #e41f19;
+  border-radius: 2rpx;
+}
+
+.sort-item {
+  border-left: 1rpx solid #eee;
+  flex: 0.8;
+}
+
+.sort-item .status-text {
+  color: #666;
+}
+
+.product-list {
+  margin-top: 88rpx;
+  padding: 0 20rpx;
+}
+
+/* 统一按钮基础样式 */
+.float-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: fixed;
+  right: 20px;
+  z-index: 999;
+}
+
+.float-btn:active {
+  transform: scale(0.9);
+}
+
+/* 添加按钮样式 */
+.add_icon {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  bottom: 180rpx;
+  right: 28px;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15),
+             -6px -6px 12px rgba(255, 255, 255, 1),
+             inset 1px 1px 2px rgba(255, 255, 255, 1),
+             inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  z-index: 999;
+  font-size: 46rpx !important;
+  color: #e41f19 !important;
+  font-weight: normal !important;
+  border: 2px solid #e41f19;
+  line-height: 32px;
+  margin-top: -2px;
+  text-align: center;
+}
+
+.add_icon:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1),
+             -3px -3px 6px rgba(255, 255, 255, 0.8),
+             inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+             inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.tui-header-box {
+  width: 100%;
+  background: #fff;
+  position: fixed;
+  z-index: 99998;
+  left: 0;
+  top: 0;
+}
+
+.tui-header {
+  display: flex;
+  align-items: flex-start;
+}
+
+.tui-back {
+  margin-left: 8rpx;
+  height: 32px !important;
+  width: 32px !important;
+  display: block !important;
+}
+
+.tui-searchbox {
+  width: 100%;
+  height: 30px;
+  margin-right: 20rpx;
+  border-radius: 15px;
+  font-size: 12px;
+  background: #f7f7f7;
+  padding: 3px 10px;
+  box-sizing: border-box;
+  color: #999;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.tui-search-text {
+  padding-left: 16rpx;
+}
+
+.tui-search-key {
+  max-width: 80%;
+  height: 100%;
+  padding: 0 16rpx;
+  margin-left: 12rpx;
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  /* transform: scale(0.9);
+  transform-origin: 0 center; */
+}
+
+.tui-key-text {
+  box-sizing: border-box;
+  padding-right: 3rpx;
+  padding-left: 3rpx;
+  font-size: 12px;
+  line-height: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tui-dropdownlist {
+  width: 100%;
+  position: absolute;
+  background: #fff;
+  border-bottom-left-radius: 24rpx;
+  border-bottom-right-radius: 24rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-top: 10rpx;
+  padding-bottom: 26rpx;
+  left: 0;
+  top: 88rpx;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  z-index: 999;
+}
+
+.tui-dropdownlist-show {
+  visibility: visible;
+}
+
+.tui-dropdownlist-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.tui-mask-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tui-dropdownlist-item {
+  color: #333;
+  height: 70rpx;
+  font-size: 28rpx;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tui-seizeaseat-20 {
+  height: 20rpx;
+}
+
+.tui-seizeaseat-30 {
+  height: 30rpx;
+}
+
+.tui-middle {
+  vertical-align: middle;
+}
+
+/* MY按钮样式 */
+.bottom-bar {
+  position: fixed;
+  bottom: 50rpx;
+  right: 28px;
+  height: auto;
+  background: transparent;
+  border-top: none;
+  box-shadow: none;
+  z-index: 999;
+}
+
+.filter-button {
+  position: fixed;
+  bottom: 50rpx;
+  right: 28px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15),
+             -6px -6px 12px rgba(255, 255, 255, 1),
+             inset 1px 1px 2px rgba(255, 255, 255, 1),
+             inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+  padding: 0;
+  color: #e41f19;
+  font-weight: normal;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 2px solid #e41f19;
+}
+
+.filter-button:active {
+  transform: scale(0.95);
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1),
+             -3px -3px 6px rgba(255, 255, 255, 0.8),
+             inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+             inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.filter-button text {
+  display: none;
+}
+
+.filter-button::after {
+  content: 'MY';
+  color: #e41f19;
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+/* 隐藏scroll-view滚动条*/
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

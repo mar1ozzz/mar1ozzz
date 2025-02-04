@@ -1,0 +1,18 @@
+.tui-modal-custom {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-content {
+  font-size: 30rpx;
+  min-height: 220rpx;
+  padding: 40rpx 64rpx 0rpx;
+}
+
+.info-btn {
+  text-align: center;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.08);
+  height: 84rpx;
+  line-height: 84rpx;
+  color: #f06c7a;
+}

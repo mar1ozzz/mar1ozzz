@@ -1,0 +1,187 @@
+page {
+  padding-bottom: 90rpx;
+}
+.mybox{
+  margin-top: 20rpx;
+  
+}
+.container {  
+
+  background-color: #eeecec;
+}
+
+.tui-cell-title {
+  font-size: 30rpx;
+  line-height: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.tui-cell-header {
+  width: 100%;
+  height: 82rpx;
+  padding: 0 26rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tui-line-cell {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.tui-title {
+  line-height: 32rpx;
+  flex-shrink: 0;
+}
+
+.tui-input {
+  font-size: 32rpx;
+  color: #333;
+  padding-left: 30rpx;
+  flex: 1;
+}
+
+.set-right-text{
+  padding-top: 13px;
+  padding-bottom:13px;
+}
+
+.phcolor{
+  font-size: 26rpx;
+}
+
+.img-body {
+  width: 100%;
+}
+
+.img-header {
+  display: flex;
+  font-size: 26rpx;
+  align-items: center;
+  margin-bottom: 20rpx;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.img-title {
+  font-size: 28rpx;
+  color: #000000;
+}
+
+.img-num {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.tui-banner-swiper{
+  height:500rpx;
+  align-items: center;
+  
+}
+.tui-slide-image{
+  height:500rpx;
+  width: 100%;
+  align-self: center;
+}
+
+.position{
+  margin-top: 20rpx;
+}
+.button{
+  box-sizing: border-box;
+  flex: 0 0 33.33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  background-color:#f7def2;
+  font-size: 30rpx;
+  
+}
+
+.footer-btn {
+  display: flex;
+  flex-direction: column;
+  height: 90rpx;
+  line-height: 90rpx;
+  width: 100vw;
+  position: fixed;
+  bottom: 30rpx;
+  left: 0;
+  right: 0;
+  background-color: #f06c7a;
+  text-align: center;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 20rpx 20rpx 0rpx 0rpx;
+  margin: 0rpx;
+}
+
+.btn-box {
+  
+  position: fixed;
+  bottom: 50rpx;  
+  background-color: white;
+  display: flex;
+  width: 100vw;
+  flex-wrap: wrap;
+  
+}
+
+.image-item {
+  width: 210rpx !important;
+  height: 210rpx !important;
+}
+
+.table {
+  margin-top: 20rpx;
+  margin-bottom: 10rpx;
+  border: 0px solid darkgray;
+}
+.tr {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 60rpx;
+  align-items: center;
+}
+.td {
+    width:50%;
+    justify-content: center;
+    text-align: center;
+    font-size: 30rpx;
+}
+.bg-w{
+  background: snow;
+}
+.bg-g{
+  background: white;
+}
+.th {
+  width: 100%;
+  font-size: 30rpx;
+  justify-content: center;
+  background: white;
+  color: black;
+  display: flex;
+  height: 60rpx;
+  align-items: center;
+}
+
+.caption {
+  font-size: 30rpx;
+  width: 100%;
+  justify-content: center;
+  background: #f7def2;
+  color: black;
+  display: flex;
+  height: 60rpx;
+  align-items: center;
+}

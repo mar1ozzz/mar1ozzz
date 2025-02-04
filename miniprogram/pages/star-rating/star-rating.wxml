@@ -1,0 +1,34 @@
+<page class="page">
+  <tui-list-cell padding="0px 15px">
+    <view class="list-cell-score">
+      <view class="title">请评分</view>
+      <star bindscore="score" default="{{score}}" margin="{{margin}}"></star>
+      <view class="score">{{score}}分</view>
+    </view>
+  </tui-list-cell>
+  <tui-list-cell padding="0px 15px">
+    <view class="tui-line-cell">
+
+      <view class="uni-textarea">
+        <textarea bindconfirm="confirmTextArea" placeholder="评价内容....." maxlength="-1" class="textarea-ui" value="{{scoreComment}}" name="content" show-confirm-bar="{{true}}" placeholder-class="placeholderText" bindinput="bindTextarea" disabled="{{pageType=='show'}}" />
+      </view>
+    </view>
+  </tui-list-cell>
+  <tui-list-cell hover="{{false}}" last="{{true}}">
+    <view class="img-body">
+      <view class="img-header">
+        <view class="img-title">图片</view>
+        <view class="img-num">{{product_img_list.length}}/9</view>
+      </view>
+      <tui-upload value="{{product_img_list||[]}}" tui-upload-class="image-item" bindcomplete="chooseImageHandle" catalogue="product"></tui-upload>
+
+    </view>
+  </tui-list-cell>
+
+  <tui-list-cell class="btn-block">
+    <button class="confirm" bindtap="confirm">确定</button>
+    <button class="cancel" bindtap="cancel">取消</button>
+  </tui-list-cell>
+
+
+</page>

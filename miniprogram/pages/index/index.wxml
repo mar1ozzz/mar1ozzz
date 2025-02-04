@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="tui-header-screen">
+    <view class="status-bar">
+      <view class="status-item {{currentStatus==0?'status-active':''}}" bindtap="handleStatusChange" data-index="0">
+        <view class="status-text">全部状态</view>
+      </view>
+      <view class="status-item {{currentStatus==1?'status-active':''}}" bindtap="handleStatusChange" data-index="1">
+        <view class="status-text">待处理</view>
+      </view>
+      <view class="status-item {{currentStatus==2?'status-active':''}}" bindtap="handleStatusChange" data-index="2">
+        <view class="status-text">已处理</view>
+      </view>
+
+      <view class="status-item sort-item">
+  <picker mode="selector" range="{{pickerList}}" bindchange="typePickerChange">
+    <view class="status-text">
+      {{selectedType || '全部类别'}}
+      <tui-icon name="arrowdown" size="14" color="#666"></tui-icon>
+    </view>
+  </picker>
+</view>
+
+    </view>
+  </view>
+
+  <view class="product-list">
+    <product-body mode="{{'one'}}" data="{{productList}}" binddetail="detail"></product-body>
+  </view>
+
+  <text bindtap='addPost' class="add_icon">+</text>
+
+  <tui-loadmore visible="{{loading}}" index="3" type="red"></tui-loadmore>
+  <tui-nomore visible="{{!loadend}}"></tui-nomore>
+
+  <view class="bottom-bar">
+    <view class="filter-button" bindtap="showActionSheet">
+      <!-- 使用 ::after 伪元素显示 MY 文字 -->
+    </view>
+  </view>
+
+  <tui-actionsheet 
+    show="{{showActionSheet}}" 
+    bind:click="itemClick" 
+    bind:cancel="closeActionSheet" 
+    item-list="{{actionSheetItems}}" 
+    mask-closable="{{true}}" 
+    color="#333" 
+    size="28"
+    radius="24">
+  </tui-actionsheet>
+</view>
