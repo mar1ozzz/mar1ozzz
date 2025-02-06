@@ -8,6 +8,7 @@ Page({
       title: "电话",
       key: "phone",
       width:"200rpx"
+     
     }, 
     {
       title: "审核",
@@ -15,6 +16,7 @@ Page({
       render: function (val) {
         return val=='true'? '已审核' : '未审核'
       }
+      
     }, {
       title: "权限",
       key: "isAdmin",
@@ -23,61 +25,51 @@ Page({
       }
     }],
     dataList: [],
+    page: 1,
+    limit: 10,
+    isLoad: true,
+
+
     showModal: false,
     userMoney: '',
     userId: ''
   },
-
   onLoad() {
     this.initComponent();
   },
-
   initComponent() {
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    });
     this.getList();
   },
-
   getList() {
-    // 一次性获取所有用户数据
+    const {
+      page,
+      limit,
+      dataList,
+      isLoad
+    } = this.data;
+    if (!isLoad) {
+      return;
+    }
     app.$api.getUserlist({
-      page: 1,
-      limit: 999999 // 设置一个足够大的数字以获取所有数据
+      page: page,
+      limit: 99999
     }).then(res => {
-      wx.hideLoading();
+      let result = res.data
       if (res.code) {
-        // 对数据按创建时间倒序排序
-        const sortedList = res.data.sort((a, b) => {
-          return new Date(b.createTime || 0) - new Date(a.createTime || 0);
-        });
-        
-        // 未审核的用户排在前面
-        const finalList = sortedList.sort((a, b) => {
-          if (a.isGrant === 'true' && b.isGrant !== 'true') return 1;
-          if (a.isGrant !== 'true' && b.isGrant === 'true') return -1;
-          return 0;
-        });
-
         this.setData({
-          dataList: finalList
-        });
-      } else {
-        wx.showToast({
-          title: '获取用户列表失败',
-          icon: 'error'
-        });
+          dataList: dataList.concat(result)
+        })
+        if (result.length < limit) {
+          this.setData({
+            isLoad: false
+          })
+        }
+        this.setData({
+          page: page + 1
+        })
       }
-    }).catch(err => {
-      wx.hideLoading();
-      wx.showToast({
-        title: '获取用户列表失败',
-        icon: 'error'
-      });
-    });
+    })
   },
-
   handleClickItem(e) {
     const {
       index
@@ -100,100 +92,73 @@ Page({
         if (tapIndex == 1) {
           this.updateAdmin(index)
         } 
+        
         if(tapIndex == 2){
           this.deleteUser(index)
         }
       }
     })
   },
-
-  deleteUser(index) {
+  confirmUser(index){   
     let {
       dataList
     } = this.data
-    let dataItem = dataList[index]
-    wx.showModal({
-      title: '提示',
-      content: '确认删除该用户吗？',
-      success: (res) => {
-        if (res.confirm) {
-          app.$api.userDelete({
-            _id: dataItem._id
-          }).then(res => {
-            if (res.code) {
-              dataList.splice(index, 1)
-              this.setData({
-                dataList
-              })
-              app.$comm.successToShow('删除成功')
-            }
-          })
-        }
-      }
+   let dataItem = dataList[index]
+    app.$api.userConfirm({
+      _id:dataItem._id
+    }).then(res=>{
+      dataItem.isGrant = 'true'
+      this.setData({
+        dataList:dataList
+      })
+      console.log(res)
     })
   },
-
+  deleteUser(index){
+    let {
+      dataList
+    } = this.data
+   let dataItem = dataList[index]
+    app.$api.userDelete({
+      _id:dataItem._id
+    }).then(res=>{
+      dataList.splice(index, 1)
+      this.setData({
+        dataList:dataList
+      })     
+    })
+  },
   updateAdmin(index) {
     let {
       dataList
     } = this.data
     let dataItem = dataList[index]
-    let content = dataItem.isAdmin ? '确认撤销管理员权限吗？' : '确认设置为管理员吗？'
-    wx.showModal({
-      title: '提示',
-      content: content,
-      success: (res) => {
-        if (res.confirm) {
-          let promise = null
-          if (dataItem.isAdmin) {
-            promise = app.$api.cancelAdmin({
-              _id: dataItem._id
-            })
-          } else {
-            promise = app.$api.setAdmin({
-              _id: dataItem._id
-            })
-          }
-          promise.then(res => {
-            if (res.code) {
-              dataItem.isAdmin = !dataItem.isAdmin
-              this.setData({
-                dataList
-              })
-              app.$comm.successToShow('修改成功')
-            }
+    if (dataItem.isAdmin) {
+      app.$api.cancelAdmin({
+        userId: dataItem._id
+      }).then(res => {
+        if (res.code) {
+          dataItem.isAdmin = false
+          app.$comm.successToShow(res.msg)
+          this.setData({
+            dataList: dataList
           })
         }
-      }
-    })
-  },
-
-  confirmUser(index) {
-    let {
-      dataList
-    } = this.data
-    let dataItem = dataList[index]
-    wx.showModal({
-      title: '提示',
-      content: '确认该用户吗？',
-      success: (res) => {
-        if (res.confirm) {
-          app.$api.userConfirm({
-            _id: dataItem._id
-          }).then(res => {
-            if (res.code) {
-              dataItem.isGrant = 'true'
-              this.setData({
-                dataList
-              })
-              app.$comm.successToShow('确认成功')
-            }
+      })
+    } else {
+      app.$api.setAdmin({
+        userId: dataItem._id
+      }).then(res => {
+        if (res.code) {
+          dataItem.isAdmin = true
+          app.$comm.successToShow(res.msg)
+          this.setData({
+            dataList: dataList
           })
         }
-      }
-    })
+      })
+    }
   },
-
   showModalHandle(index) {
     let {
       dataList
@@ -201,40 +166,46 @@ Page({
     let dataItem = dataList[index]
     this.setData({
       showModal: true,
-      userId: dataItem._id
+      userId: dataItem._id,
+      userMoney: dataItem.money
     })
   },
-
   userMoneyInputHandle(e) {
+    let {
+      value
+    } = e.detail
     this.setData({
-      userMoney: e.detail.value
+      userMoney: value
     })
   },
-
   hideModalHandle() {
     this.setData({
-      showModal: false,
-      userMoney: ''
+      showModal: false
     })
   },
-
   userMoneyClickHandle() {
     let {
       userMoney,
-      userId
+      userId,
+      dataList
     } = this.data
-    if (!userMoney) {
-      app.$comm.errorToShow('请输入金额')
-      return
+    if (!app.$validate.isInteger(userMoney)) {
+      return app.$comm.errorToShow("请输入合理余额格式")
     }
     app.$api.updateUserMoney({
-      _id: userId,
-      money: userMoney
+      userId,
+      userMoney
     }).then(res => {
       if (res.code) {
+        dataList.find(item => item._id == userId).money = userMoney
         this.hideModalHandle()
-        app.$comm.successToShow('修改成功')
+        this.setData({
+          dataList
+        })
       }
     })
-  }
+  },
+  onReachBottom() {
+    this.getList()
+  },
 });

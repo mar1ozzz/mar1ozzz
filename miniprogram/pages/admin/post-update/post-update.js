@@ -2,11 +2,12 @@ const app = getApp();
 
 Page({
   data: {
-    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','重点场景'],
     classifyIndex: 0,
     zhuangtaiList:  ['待回复','规划中','建设中','暂挂中','已解决'], 
     ztlistpost: '',
-    product_img_list: [],
+    product_img_list: [], // 用于存储标题区域的图片
+    reply_images: [], // 用于存储回复区域的图片
     pageType: '', 
     _id: "",
     watched:false,
@@ -121,7 +122,9 @@ Page({
             commentList: postData.commentList || [],
             classifyIndex: this.data.classifyList.indexOf(postData.type),
             ztlistpost: postData.当前状态,
-            watched: false  // 默认未关注，会通过getWatch更新
+            watched: false,  // 默认未关注，会通过getWatch更新
+            username: postData.author || '',
+            createTime: postData.product_time || ''
           });
 
           // 初始化地图上下文
@@ -201,6 +204,13 @@ Page({
   chooseImageHandle(e) {
     this.setData({
       product_img_list: e.detail.imgArr || []
+    });
+  },
+
+  chooseReplyImageHandle(e) {
+    // 在这里处理评论区的图片上传逻辑
+    this.setData({
+      reply_images: e.detail.imgArr || []
     });
   },
 
@@ -345,9 +355,18 @@ Page({
 
   onStatusChange(e) {
     const index = e.detail.value;
-    this.setData({
-      currentStatus: this.data.zhuangtaiList[index]
-    });
+    const status = this.data.zhuangtaiList[index];
+    const statusText = `#${status} `;
+    let content = this.data.commentContent || '';
+    
+    // 检查是否已经存在状态标签
+    if (!content.includes(statusText)) {
+      content = content + statusText;  // 改为添加到末尾
+      this.setData({
+        currentStatus: status,
+        commentContent: content
+      });
+    }
   },
 
   submitComment() {
@@ -358,7 +377,7 @@ Page({
       });
       return;
     }
-
+  
     if (!this.data.currentStatus) {
       wx.showToast({
         title: '请您选择问题当前状态',
@@ -366,7 +385,7 @@ Page({
       });
       return;
     }
-
+  
     const commentData = {
       parentId: this.data._id,
       content: this.data.commentContent,
@@ -374,29 +393,30 @@ Page({
       author_id: app.globalData.userInfo.OPENID,
       author_belong: app.globalData.userInfo.quxian,
       postStatus: this.data.currentStatus,
-      product_img_list: [],
+      product_img_list: this.data.reply_images, // 提交回复图片
       atUser: '',
       atOpenid: ''
     };
-
+  
     if (this.data.selectedUser) {
       commentData.atUser = `${this.data.selectedUser.username}${this.data.selectedUser.quxian}`;
       commentData.atOpenid = this.data.selectedUser.OPENID;
     }
-
+  
     app.$api.addPostAdmin(commentData).then(res => {
       if (res.code) {
         const statusData = {
           id: this.data._id,
           当前状态: this.data.currentStatus
         };
-
+  
         app.$api.setPostStatus(statusData).then(() => {
           wx.showToast({
             title: '回复成功',
             icon: 'success'
           });
-
+  
+          // 重新加载帖子详情
           const condition = {
             id: this.data._id,
             isLogin: true
@@ -407,9 +427,15 @@ Page({
                 commentList: res.data[0].commentList,
                 ztlistpost: res.data[0].当前状态,
                 commentContent: '',
+                reply_images: [], // 清空回复图片
                 isReassign: false,
                 selectedUser: null,
                 currentStatus: ''
+              }, () => {
+                // 强制刷新页面
+                this.setData({
+                  forceUpdate: Math.random() // 强制更新页面
+                });
               });
             }
           });

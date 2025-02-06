@@ -34,14 +34,27 @@
       </view>
     </view>
   </view>
+
   <view class="location-view">
-    <text class="location-text">经度：{{longitude}}</text>
-    <text class="location-text">纬度：{{latitude}}</text>
+  <text>经度：{{longitude}}</text>
+  <text>纬度：{{latitude}}</text>
+  <button class="copy-ll-btn" bindtap="copyLL">复制</button>
   </view>
+
 </view>
 
 <view class="container">
   <form bindsubmit="formSubmit">
+  
+    <block wx:if="{{pageType!='add'}}">
+      <tui-list-cell>
+        <view class="tui-line-cell" style="margin-bottom: 5px; display: flex; justify-content: space-between;">
+          <text style="color: #666; font-size: 12px;">{{username}}</text>
+          <text style="color: #999; font-size: 12px;">{{createTime}}</text>
+        </view>
+      </tui-list-cell>
+    </block>
+
     <tui-list-cell>
       <view class="tui-line-cell">
         <view class="title-row">
@@ -50,12 +63,7 @@
             <view class="tui-title">标题</view>
             <input placeholder-class="phcolor" value="{{title}}" class="tui-input" name="title" disabled="{{pageType=='show'}}" placeholder="请输入标题" type="text" />
           </view>
-          
-          <!-- 复制经纬度 -->
-          <view class="copy-ll-wrapper" style="display: flex;align-items: center;">
-            <view class="tui-title" style="font-size: 18px;"></view>
-            <button class="copy-ll-btn" style="font-size: 11px;" bindtap="copyLL">复制经纬度</button>
-          </view>
+
         </view>
       </view>
     </tui-list-cell>
@@ -68,7 +76,7 @@
             <input class="set-right-text" value="{{ztlistpost}}" disabled name="type" />
           </picker>
         </view>
-        <button class="my-custom-button" bindtap="xiugaizhuangtai">确认修改</button>
+        <button class="my-custom-button" bindtap="xiugaizhuangtai">修改</button>
       </tui-list-cell>
     </block>
 
@@ -105,6 +113,17 @@
         <view class="comment-input-wrapper">
           <textarea class="comment-textarea" placeholder="请输入回复内容..." value="{{commentContent}}" bindinput="onCommentInput" />
         </view>
+
+      <view class="img-upload-area">
+        <tui-upload 
+          value="{{reply_images}}" 
+          forbidAdd="{{false}}" 
+          forbidDel="{{false}}" 
+          tui-upload-class="image-item" 
+          bindcomplete="chooseReplyImageHandle" 
+          catalogue="reply">
+        </tui-upload>
+      </view>
 
         <view class="actions-row">
           <!-- 转派选项 -->

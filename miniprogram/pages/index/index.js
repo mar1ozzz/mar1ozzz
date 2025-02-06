@@ -11,8 +11,8 @@ Page({
     tabIndex: 0,
     currentStatus: 0,
     productList: [],
-    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],
-    pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','重点场景'],
+    pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆','重点场景'],
     selectedType: '',  // 筛选使用的类型值
     option: {
       page: 1,
@@ -144,9 +144,9 @@ Page({
     } else if (index == 1) {
       // 按分类筛选
       wx.showActionSheet({
-        itemList: ['全部', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆','VIP整治'],
+        itemList: ['全部', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆','重点场景'],
         success: (res) => {
-          const types = ['', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆','VIP整治']
+          const types = ['', '运维', '综维', '传输', '优化', '建设', '资管', '集客', '光缆','重点场景']
           this.setData({
             selectedType: types[res.tapIndex],
             'option.page': 1,

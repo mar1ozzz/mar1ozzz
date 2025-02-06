@@ -95,8 +95,8 @@ Page({
       type: ''
     },
     product_img_list: [],
-    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],  // 实际的类型列表
-    pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆','VIP整治'],  // picker显示的完整列表
+    classifyList: ['运维','综维','传输','优化','建设','资管','集客','光缆','重点场景'],  // 实际的类型列表
+    pickerList: ['全部','运维','综维','传输','优化','建设','资管','集客','光缆','重点场景'],  // picker显示的完整列表
     mapSelectedType: '',  // 地图筛选使用的类型值
     formData: {
       title: '',
@@ -116,12 +116,12 @@ Page({
   onLoad: function(options) {
     this.getdata();
     
-    // 30秒后隐藏提示栏
+    // 60秒后隐藏提示栏
     setTimeout(() => {
       this.setData({
         hideTip: true
       });
-    }, 30000);
+    }, 60000);
   },
 
   getdata: function() {
